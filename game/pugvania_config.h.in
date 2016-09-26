@@ -1,0 +1,7 @@
+// Configuration settings for Pugvania
+
+// Version information (configured in top-level CMakeLists.txt)
+#define PUGVANIA_VERSION_MAJOR @pugvania_VERSION_MAJOR@
+#define PUGVANIA_VERSION_MINOR @pugvania_VERSION_MINOR@
+#define PUGVANIA_VERSION_PATCH @pugvania_VERSION_PATCH@
+#define PUGVANIA_VERSION_TWEAK @pugvania_VERSION_TWEAK@
