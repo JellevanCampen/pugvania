@@ -3,8 +3,23 @@
 # Game is an executable project containing game code. 
 #
 
+#
+# Import all source files and organize them in source groups.
+#
+
+# [ game ]
+set (SRC_GAME 
+	"main.cpp"
+	)
+source_group (game FILES ${SRC_GAME})
+
+# [ <ALL> ]
+set (SRC_ALL
+	${SRC_GAME}
+	)
+
 # Make Game an executable project
-add_executable (game main.cpp)
+add_executable (game ${SRC_ALL})
 
 # The headers containing version information are generated in the binary 
 # directory. This directory is therefore added as an include directory.

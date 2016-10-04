@@ -3,8 +3,31 @@
 # Engine is a static library project containing engine code. 
 #
 
+#
+# Import all source files and organize them in source groups.
+#
+
+# [ engine ]
+set (SRC_ENGINE 
+	"engine.h"
+	"engine.cpp"
+	)
+source_group (engine FILES ${SRC_ENGINE})
+
+# [ engine/utility ]
+set (SRC_ENGINE_UTILITY 
+	"utility/game_time.h"
+	)
+source_group (engine\\utility FILES ${SRC_ENGINE_UTILITY})
+
+# [ <ALL> ]
+set (SRC_ALL
+	${SRC_ENGINE}
+	${SRC_ENGINE_UTILITY}
+	)
+
 # Make Engine static library project
-add_library (engine engine.cpp engine.h)
+add_library (engine ${SRC_ALL})
 
 # The headers containing version information are generated in the binary 
 # directory. This directory is therefore added as an include directory.
