@@ -1,16 +1,24 @@
 #include <iostream>
-#include "game/pugvania_config.h"
+#include "engine.h"
+#include "game_config.h"
 
 int main()
 {
-	std::cout << "Pugvania V"
-		<< PUGVANIA_VERSION_MAJOR << "."
-		<< PUGVANIA_VERSION_MINOR << "."
-		<< PUGVANIA_VERSION_PATCH << "."
-		<< PUGVANIA_VERSION_TWEAK
-		<< std::endl;
+  std::cout << "Running Pugvania" << std::endl;
+  std::cout << "Version: "
+    << GAME_VERSION_MAJOR << "."
+    << GAME_VERSION_MINOR << "."
+    << GAME_VERSION_PATCH << "."
+    << GAME_VERSION_TWEAK
+    << std::endl;
 
-	std::cin;
+  Engine::Engine engine;
+  engine.Initialize();
+  engine.Start();
+  engine.Stop();
+  engine.Terminate();
+  
+  std::cin;
 
-	return 0;
+  return 0;
 }
