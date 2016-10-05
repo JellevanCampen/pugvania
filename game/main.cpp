@@ -12,7 +12,7 @@ int main()
     << GAME_VERSION_TWEAK
     << std::endl;
 
-  Engine::Engine engine;
+  engine::Engine engine;
   engine.Initialize();
   engine.Start();
   engine.Stop();

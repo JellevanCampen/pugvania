@@ -2,7 +2,7 @@
 #ifndef ENGINE_ENGINE_H_
 #define ENGINE_ENGINE_H_
 
-namespace Engine {
+namespace engine {
 
 // Encompasses all subsystems used to run the Game. It is responsible for 
 // subsystem initialization and termination, as well as running the game loop.

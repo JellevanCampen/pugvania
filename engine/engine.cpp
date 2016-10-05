@@ -2,7 +2,7 @@
 #include <iostream>
 #include "engine_config.h"
 
-namespace Engine {
+namespace engine {
 
 	void Engine::Initialize()	{
 		std::cout << "Initializing Engine." << std::endl;
