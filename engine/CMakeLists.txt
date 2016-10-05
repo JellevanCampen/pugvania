@@ -22,10 +22,17 @@ set (SRC_ENGINE_UTILITY
 	)
 source_group (engine\\utility FILES ${SRC_ENGINE_UTILITY})
 
+# [ engine/utility/patterns ]
+set (SRC_ENGINE_UTILITY_PATTERNS 
+	"utility/patterns/reverse_iterator.h"
+	)
+source_group (engine\\utility\\patterns FILES ${SRC_ENGINE_UTILITY_PATTERNS})
+
 # [ <ALL> ]
 set (SRC_ALL
 	${SRC_ENGINE}
 	${SRC_ENGINE_UTILITY}
+	${SRC_ENGINE_UTILITY_PATTERNS}
 	)
 
 # Make Engine static library project
