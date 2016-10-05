@@ -50,7 +50,8 @@ void Engine::RunGameLoop() {
       lag -= time_step_micros;
     }
 
-    Draw(std::min(1.0f,((float)lag.count())/((float)time_step_micros_)));
+    if (drawing_is_enabled_) 
+      Draw(std::min(1.0f,((float)lag.count())/((float)time_step_micros_)));
   }
 }
 
