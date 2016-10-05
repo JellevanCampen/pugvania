@@ -47,7 +47,7 @@ class Engine {
   // 123 to 137 for more info.)
   bool update_time_step_is_fixed_{ true };
   // Update interval to use in case of a fixed update time step. 
-  unsigned int time_step_micros_{ 1000000 / 60 };
+  unsigned int time_step_micros_{ 1000000 / 6000 };
   // Whether output should be drawn on screen as fast as possible, or only 
   // once per update. By using the frame interpolation value provided on draw 
   // calls, it is possible to draw animations at a higher rate then the 

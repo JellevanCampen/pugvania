@@ -45,9 +45,11 @@ void Engine::RunGameLoop() {
     time_previous = time_current;
     lag += time_since_last_update;
 
-    while (lag >= time_step_micros) {
+    unsigned short int frame_skip_counter{ 0 };
+    while (lag >= time_step_micros && frame_skip_counter <= max_frame_skip_) {
       Update(time_step_micros_);
       lag -= time_step_micros;
+      frame_skip_counter++;
     }
 
     if (drawing_is_enabled_) 
@@ -68,7 +70,7 @@ void Engine::Draw(float frame_interpolation) {
   game_time_.Draw(frame_interpolation);
 
   // TODO(Jelle): Remove this when the flexible game loop is finilized. 
-  // std::cout << "Draw (" << game_time_.GetDrawCount() << "): total = " << game_time_.GetTotalTimeMicros() << ", interpolation = " << game_time_.GetFrameInterpolation() << std::endl;
+  std::cout << "Draw (" << game_time_.GetDrawCount() << "): total = " << game_time_.GetTotalTimeMicros() << ", interpolation = " << game_time_.GetFrameInterpolation() << std::endl;
 }
 
 } // namespace
