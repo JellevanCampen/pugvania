@@ -45,14 +45,14 @@ class Engine {
   // deterministic while a variable time step can offer a smoother experience 
   // on faster systems. (See: R. Nystrom - Game Programming Patterns pages 
   // 123 to 137 for more info.)
-  bool update_time_step_is_fixed_{ true };
+  bool update_time_step_is_fixed_{ false };
   // Update interval to use in case of a fixed update time step. 
-  unsigned int time_step_micros_{ 1000000 / 10 };
+  unsigned int time_step_micros_{ 1000000 / 60 };
   // Whether output should be drawn on screen as fast as possible, or only 
   // once per update. By using the frame interpolation value provided on draw 
   // calls, it is possible to draw animations at a higher rate then the 
   // update rate. 
-  bool draw_rate_is_capped_{ true };
+  bool draw_rate_is_capped_{ false };
   // The maximum of draws to drop before forcedly rendering one, in case the 
   // update + draw time is longer than the desired fixed update rate. 
   unsigned short int max_frame_skip_{ 5 };

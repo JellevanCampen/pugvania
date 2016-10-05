@@ -44,20 +44,34 @@ void Engine::RunGameLoop() {
     TimePointMicros time_current = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
     DurationMicros time_since_last_update = (time_current - time_previous);
     time_previous = time_current;
-    lag += time_since_last_update;
 
-    unsigned short int frame_skip_counter{ 0 };
-    while (lag >= time_step_micros && frame_skip_counter <= max_frame_skip_) {
-      Update(time_step_micros_);
-      lag -= time_step_micros;
-      frame_skip_counter++;
-      update_drawn = false;
-    }
+    if (update_time_step_is_fixed_) {
+      // Fixed time step loop. The principle: update once, then keep drawing 
+      // until its time for another update. Settings: "drawing enabled vs 
+      // disabled", "capped vs uncapped framerate", and "maximum frameskip" 
+      // can cause slight deviations from this behavior. 
+      lag += time_since_last_update;
+      unsigned short int frame_skip_counter{ 0 };
+      while (lag >= time_step_micros && frame_skip_counter <= max_frame_skip_) {
+        Update(time_step_micros_);
+        lag -= time_step_micros;
+        frame_skip_counter++;
+        update_drawn = false;
+      }
 
-    if (drawing_is_enabled_ && (!draw_rate_is_capped_ || !update_drawn)) {
-      Draw(std::min(1.0f, ((float)lag.count()) / ((float)time_step_micros_)));
-      update_drawn = true;
+      if (drawing_is_enabled_ && (!draw_rate_is_capped_ || !update_drawn)) {
+        Draw(std::min(1.0f, ((float)lag.count()) / ((float)time_step_micros_)));
+        update_drawn = true;
+      }
+    } else {
+      // Variable time step loop. The principle: perform updates succeeded by 
+      // draws as fast as possible. Setting: "drawing enabled vs disabled",  
+      // can cause a slight deviation from this behavior. 
+      Update(time_since_last_update.count());
+      if (drawing_is_enabled_)
+        Draw(0.0f);
     }
+    
   }
 }
 
