@@ -4,7 +4,7 @@
 
 namespace engine {
 
-// Provides access to timing information of the game loop. This information is 
+// Provides access to timing information on the game loop. This information is 
 // updated on every update and draw call so that every object gets the same 
 // timing information during a single update or frame. 
 class GameTime {
@@ -18,7 +18,7 @@ class GameTime {
   // Gets the relative amount of time since the last update. A value of 0 
   // means the update just happened, and a value near 1 means the next update 
   // is imminent. 
-  unsigned int GetFrameInterpolation() const { return frame_interpolation_; }
+  float GetFrameInterpolation() const { return frame_interpolation_; }
   // Gets the number of draws since the game loop was started.
   unsigned int GetDrawCount() const { return draw_count_; }
 
@@ -35,6 +35,10 @@ class GameTime {
   unsigned int update_count_{ 0 };
   float frame_interpolation_{ 0.0f };
   unsigned int draw_count_{ 0 };
+
+  // The engine class is allowed to update the timing information as it 
+  // possesses the game loop;
+  friend class Engine;
 };
 
 } // namespace
