@@ -17,6 +17,7 @@ source_group (engine FILES ${SRC_ENGINE})
 # [ engine/utility ]
 set (SRC_ENGINE_UTILITY 
 	"utility/game_time.h"
+	"utility/game_time.cpp"
 	)
 source_group (engine\\utility FILES ${SRC_ENGINE_UTILITY})
 
