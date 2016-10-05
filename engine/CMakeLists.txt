@@ -11,6 +11,7 @@
 set (SRC_ENGINE 
 	"engine.h"
 	"engine.cpp"
+	"engine_subsystem.h"
 	)
 source_group (engine FILES ${SRC_ENGINE})
 
