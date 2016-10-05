@@ -14,6 +14,15 @@ set (SRC_ENGINE
 	)
 source_group (engine FILES ${SRC_ENGINE})
 
+# [ engine/debugging ]
+set (SRC_ENGINE_DEBUGGING
+	"debugging/logging.h"
+	"debugging/logging.cpp"
+	"debugging/log_channel.h"
+	"debugging/log_channel.cpp"
+	)
+source_group (engine\\debugging FILES ${SRC_ENGINE_DEBUGGING})
+
 # [ engine/utility ]
 set (SRC_ENGINE_UTILITY 
 	"utility/game_time.h"
@@ -24,6 +33,7 @@ source_group (engine\\utility FILES ${SRC_ENGINE_UTILITY})
 # [ <ALL> ]
 set (SRC_ALL
 	${SRC_ENGINE}
+	${SRC_ENGINE_DEBUGGING}
 	${SRC_ENGINE_UTILITY}
 	)
 
