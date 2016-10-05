@@ -1,8 +1,12 @@
 #include "engine.h"
 #include <iostream>
+#include <algorithm>
 #include "engine_config.h"
 
 namespace engine {
+
+typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
+typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
 
 void Engine::Initialize()	{
   std::cout << "Initializing Engine." << std::endl;
@@ -30,21 +34,40 @@ void Engine::Terminate() {
 }
 
 void Engine::RunGameLoop() {
-  // TODO(Jelle): implement the actual, flexible game loop. 
+  // TODO(Jelle): implement the actual, flexible game loop.
+  DurationMicros time_step_micros{ time_step_micros_ };
+  TimePointMicros time_previous = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
+  DurationMicros lag{ 0 };
+
   while (is_running_) {
-    Update();
-    Draw();
+    TimePointMicros time_current = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
+    DurationMicros time_since_last_update = (time_current - time_previous);
+    time_previous = time_current;
+    lag += time_since_last_update;
+
+    while (lag >= time_step_micros) {
+      Update(time_step_micros_);
+      lag -= time_step_micros;
+    }
+
+    Draw(std::min(1.0f,((float)lag.count())/((float)time_step_micros_)));
   }
 }
 
-void Engine::Update() {
+void Engine::Update(unsigned int delta_time_micros) {
   // Update game timing information first, as it is used by all other updates. 
-  game_time_.Update(time_step_micros_);
+  game_time_.Update(delta_time_micros);
+
+  // TODO(Jelle): Remove this when the flexible game loop is finilized. 
+  std::cout << "Update (" << game_time_.GetUpdateCount() << "): total = " << game_time_.GetTotalTimeMicros() << ", delta = " << game_time_.GetDeltaTimeMicros() << std::endl;
 }
 
-void Engine::Draw() {
+void Engine::Draw(float frame_interpolation) {
   // Update game timing information first, as it is used by all other draws. 
-  game_time_.Draw(0.0f);
+  game_time_.Draw(frame_interpolation);
+
+  // TODO(Jelle): Remove this when the flexible game loop is finilized. 
+  // std::cout << "Draw (" << game_time_.GetDrawCount() << "): total = " << game_time_.GetTotalTimeMicros() << ", interpolation = " << game_time_.GetFrameInterpolation() << std::endl;
 }
 
 } // namespace

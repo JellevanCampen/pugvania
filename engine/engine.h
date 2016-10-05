@@ -2,6 +2,7 @@
 #ifndef ENGINE_ENGINE_H_
 #define ENGINE_ENGINE_H_
 
+#include <chrono>
 #include "utility\game_time.h"
 
 namespace engine {
@@ -29,10 +30,10 @@ class Engine {
   void RunGameLoop();
   // Updates the game world. Sends requests to all subsystems and game objects 
   // to update themselves. 
-  void Update();
+  void Update(unsigned int delta_time_micros);
   // Draws the game world. Sends requests to all subsystems and game objects 
   // to draw themselves.
-  void Draw();
+  void Draw(float frame_interpolation);
 
   bool is_running_{ false };
   GameTime game_time_{ };
