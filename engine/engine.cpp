@@ -5,9 +5,6 @@
 
 namespace engine {
 
-typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
-typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
-
 void Engine::Initialize()	{
   std::cout << "Initializing Engine." << std::endl;
   std::cout << "Version: " 
@@ -20,6 +17,11 @@ void Engine::Initialize()	{
 
 void Engine::Start() {
   // TODO(Jelle): load the game loop settings from a configuration file. 
+
+  // Initialize the update and draw rate sampling times so that both rates can  
+  // be measured from this point on. 
+  update_rate_sample_time_ = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
+  draw_rate_sample_time_ = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
 
   is_running_ = true;
   RunGameLoop();
@@ -34,7 +36,6 @@ void Engine::Terminate() {
 }
 
 void Engine::RunGameLoop() {
-  // TODO(Jelle): implement the actual, flexible game loop.
   DurationMicros time_step_micros{ time_step_micros_ };
   TimePointMicros time_previous = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
   DurationMicros lag{ 0 };
@@ -57,19 +58,24 @@ void Engine::RunGameLoop() {
         lag -= time_step_micros;
         frame_skip_counter++;
         update_drawn = false;
+        SampleUpdateRate();
       }
 
       if (drawing_is_enabled_ && (!draw_rate_is_capped_ || !update_drawn)) {
         Draw(std::min(1.0f, ((float)lag.count()) / ((float)time_step_micros_)));
         update_drawn = true;
+        SampleDrawRate();
       }
     } else {
       // Variable time step loop. The principle: perform updates succeeded by 
       // draws as fast as possible. Setting: "drawing enabled vs disabled",  
       // can cause a slight deviation from this behavior. 
       Update(time_since_last_update.count());
-      if (drawing_is_enabled_)
+      SampleUpdateRate();
+      if (drawing_is_enabled_) {
         Draw(0.0f);
+        SampleDrawRate();
+      }
     }
     
   }
@@ -80,7 +86,8 @@ void Engine::Update(unsigned int delta_time_micros) {
   game_time_.Update(delta_time_micros);
 
   // TODO(Jelle): Remove this when the flexible game loop is finilized. 
-  std::cout << "Update (" << game_time_.GetUpdateCount() << "): total = " << game_time_.GetTotalTimeMicros() << ", delta = " << game_time_.GetDeltaTimeMicros() << std::endl;
+  // std::cout << "Update (" << game_time_.GetUpdateCount() << "): total = " << game_time_.GetTotalTimeMicros() << ", delta = " << game_time_.GetDeltaTimeMicros() << std::endl;
+  std::cout << "UPS (" << game_time_.GetUpdateCount() << "):" << GetUpdateRate() << std::endl;
 }
 
 void Engine::Draw(float frame_interpolation) {
@@ -88,7 +95,28 @@ void Engine::Draw(float frame_interpolation) {
   game_time_.Draw(frame_interpolation);
 
   // TODO(Jelle): Remove this when the flexible game loop is finilized. 
-  std::cout << "Draw (" << game_time_.GetDrawCount() << "): total = " << game_time_.GetTotalTimeMicros() << ", interpolation = " << game_time_.GetFrameInterpolation() << std::endl;
+  // std::cout << "Draw (" << game_time_.GetDrawCount() << "): total = " << game_time_.GetTotalTimeMicros() << ", interpolation = " << game_time_.GetFrameInterpolation() << std::endl;
+  std::cout << "FPS (" << game_time_.GetDrawCount() << "):" << GetDrawRate() << std::endl;
+}
+
+void Engine::SampleUpdateRate() {
+  if (game_time_.update_count_ % update_rate_sample_ == 0) {
+    TimePointMicros now = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
+    DurationMicros elapsed = (now - update_rate_sample_time_);
+    update_rate_sample_time_ = now;
+    float update_rate_current = update_rate_sample_ * 1000000.0f / ((float)elapsed.count());
+    update_rate_ = (update_rate_ * (update_rate_sample_ - 1) + (update_rate_current)) / update_rate_sample_;
+  }
+}
+
+void Engine::SampleDrawRate() {
+  if (game_time_.draw_count_ % draw_rate_sample_ == 0) {
+    TimePointMicros now = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
+    DurationMicros elapsed = (now - draw_rate_sample_time_);
+    draw_rate_sample_time_ = now;
+    float draw_rate_current = draw_rate_sample_ * 1000000.0f / ((float)elapsed.count());
+    draw_rate_ = (draw_rate_ * (draw_rate_sample_ - 1) + (draw_rate_current)) / draw_rate_sample_;
+  }
 }
 
 } // namespace

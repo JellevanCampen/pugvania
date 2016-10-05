@@ -22,7 +22,7 @@ project (pugvania)
 # Engine version
 set (engine_VERSION_MAJOR 0)
 set (engine_VERSION_MINOR 0)
-set (engine_VERSION_PATCH 1)
+set (engine_VERSION_PATCH 2)
 set (engine_VERSION_TWEAK 0)
 
 # Game version
