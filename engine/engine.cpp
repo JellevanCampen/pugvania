@@ -15,11 +15,14 @@ void Engine::Initialize()	{
 }
 
 void Engine::Start() {
+  // TODO(Jelle): load the game loop settings from a configuration file. 
 
+  is_running_ = true;
+  RunGameLoop();
 }
 
 void Engine::Stop() {
-
+  is_running_ = false;
 }
 
 void Engine::Terminate() {
