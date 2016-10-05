@@ -38,6 +38,7 @@ void Engine::RunGameLoop() {
   DurationMicros time_step_micros{ time_step_micros_ };
   TimePointMicros time_previous = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
   DurationMicros lag{ 0 };
+  bool update_drawn{ false };
 
   while (is_running_) {
     TimePointMicros time_current = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
@@ -50,10 +51,13 @@ void Engine::RunGameLoop() {
       Update(time_step_micros_);
       lag -= time_step_micros;
       frame_skip_counter++;
+      update_drawn = false;
     }
 
-    if (drawing_is_enabled_) 
-      Draw(std::min(1.0f,((float)lag.count())/((float)time_step_micros_)));
+    if (drawing_is_enabled_ && (!draw_rate_is_capped_ || !update_drawn)) {
+      Draw(std::min(1.0f, ((float)lag.count()) / ((float)time_step_micros_)));
+      update_drawn = true;
+    }
   }
 }
 
