@@ -2,6 +2,8 @@
 #include "engine.h"
 #include "game_config.h"
 
+using namespace engine;
+
 int main()
 {
   std::cout << "Running Pugvania" << std::endl;
@@ -12,11 +14,11 @@ int main()
     << GAME_VERSION_TWEAK
     << std::endl;
 
-  engine::Engine engine;
-  engine.Initialize();
-  engine.Start();
-  engine.Stop();
-  engine.Terminate();
+  Engine* engine = Engine::get();
+  engine->Initialize();
+  engine->Start();
+  engine->Stop();
+  engine->Terminate();
   
   std::cin;
 

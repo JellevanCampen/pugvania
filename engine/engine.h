@@ -11,6 +11,11 @@
 
 namespace engine {
 
+// Global reference to the Engine to make it more easilly available. Note that 
+// this ease of access comes at the cost of safety. Accessing this global 
+// pointer before the Engine is created will return a nullpointer. 
+static Engine* engine{ NULL };
+
 // TODO(JELLE): Make the log function globally available in the engine 
 // namespace. 
 // The log function is made globally avaiable for ease of logging. 
@@ -20,8 +25,21 @@ namespace engine {
 // subsystem initialization and termination, as well as running the game loop.
 class Engine {
  public:
-  // Allocates all Engine subsystems but does not perform initialization yet.
-  Engine();
+  // Instantiates (if necessary) the Engine singleton and returns is. Note 
+  // that this is the safest way to access the Engine, at is guaranteed to be 
+  // constructed. For easier access, a pointer to the access is stored 
+  // globally in the engine:: namespace. Thus, making safe access: 
+  // 'engine::Engine::Get()' and unsafe access: 'engine::engine'. 
+  static Engine* get() {
+    static Engine instance;
+    engine = &instance;
+    return engine;
+  }
+
+  // Disallow use of the copy and assignment constructors to prevent creating 
+  // multiple instances of the engine, following the singleton pattern. 
+  Engine(Engine const&) = delete;
+  void operator=(Engine const&) = delete;
   // Frees all Engine subsystems after termination was performed.
   ~Engine();
   // Initializes all engine subsystems. Must be called before starting the 
@@ -39,6 +57,11 @@ class Engine {
   float GetDrawRate() const { return draw_rate_; }
 
  private:
+  // Allocates all Engine subsystems but does not perform initialization yet. 
+  // Private constructor to ensure only a single Engine instance exists, 
+  // following the singleton pattern. 
+  Engine();
+
   typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
   typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
 
