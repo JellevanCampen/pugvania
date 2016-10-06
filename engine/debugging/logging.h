@@ -3,9 +3,10 @@
 #define ENGINE_DEBUGGING_LOGGING_H_
 
 #include <string>
-#include <forward_list>
+#include <list>
 #include "engine_subsystem.h"
 #include "log_channel.h"
+#include "log_output_terminal.h"
 
 namespace engine {
 
@@ -23,12 +24,18 @@ class Logging : public EngineSubsystem{
 
   virtual void Initialize() override;
   virtual void Terminate() override;
-  virtual void Update() override { Log("Logging is updated."); } // TODO(Jelle): Remove this, it is debug code to illustrate the logger
-  virtual void Draw() override { Log("Logging is drawn."); } // TODO(Jelle): Remove this, it is debug code to illustrate the logger
+  virtual void Update() override { } // TODO(Jelle): Remove this, it is debug code to illustrate the logger
+  virtual void Draw() override { } // TODO(Jelle): Remove this, it is debug code to illustrate the logger
   void Log(std::string message, unsigned int channels = Logging::kLog_Default);
 
  private:
-   std::forward_list<LogChannel> log_channels_;
+   void InitializeLogOutputs();
+   void InitializeLogChannels();
+   void TerminateLogOutputs();
+
+   LogOutputTerminal log_output_terminal_;
+   std::list<LogOutput*> log_outputs_;
+   std::list<LogChannel> log_channels_;
 };
 
 } // namespace

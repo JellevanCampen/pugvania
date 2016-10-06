@@ -20,6 +20,8 @@ Engine::~Engine() {
 }
 
 void Engine::Initialize()	{
+  // Note that standard console output is used here as the logging subsystem 
+  // is not initialized yet. 
   std::cout << "Initializing Engine." << std::endl;
   std::cout << "Version: " 
     << ENGINE_VERSION_MAJOR << "."

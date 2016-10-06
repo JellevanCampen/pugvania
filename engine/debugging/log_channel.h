@@ -17,6 +17,7 @@ class LogChannel {
         tag_(tag), 
         timestamp_(timestamp) {}
 
+  void RegisterLogOutput(LogOutput* log_output);
   void Log(std::string message) const;
 
   const std::string name_;
@@ -24,9 +25,8 @@ class LogChannel {
   const bool timestamp_{ false };
 
  private:
-  // List of all output destinations this log channel should pipe messages 
-  // too. A forward list is used as forward iteration is the only requirement. 
-  // std::forward_list<LogOutput*> log_outputs_;
+  // List of all output destinations this log channel should pipe messages to.
+  std::forward_list<LogOutput*> log_outputs_;
 };
 
 } // namespace
