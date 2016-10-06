@@ -31,6 +31,7 @@ source_group (engine\\debugging FILES ${SRC_ENGINE_DEBUGGING})
 set (SRC_ENGINE_UTILITY 
 	"utility/game_time.h"
 	"utility/game_time.cpp"
+	"utility/windows_terminal_colors.h"
 	)
 source_group (engine\\utility FILES ${SRC_ENGINE_UTILITY})
 
