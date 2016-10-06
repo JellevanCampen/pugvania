@@ -1,7 +1,7 @@
 // Configuration settings for Game
 
 // Version information (configured in top-level CMakeLists.txt)
-#define GAME_VERSION_MAJOR 0
-#define GAME_VERSION_MINOR 0
-#define GAME_VERSION_PATCH 1
-#define GAME_VERSION_TWEAK 0
+#define GAME_VERSION_MAJOR ${GAME_VERSION_MAJOR}
+#define GAME_VERSION_MINOR ${GAME_VERSION_MINOR}
+#define GAME_VERSION_PATCH ${GAME_VERSION_PATCH}
+#define GAME_VERSION_TWEAK ${GAME_VERSION_TWEAK}

@@ -26,6 +26,19 @@ void Engine::Initialize()	{
     << ENGINE_VERSION_TWEAK
     << std::endl;
 
+#ifdef PF_WINDOWS 
+  std::cout << "Target platform: Windows" << std::endl;
+#endif
+#ifdef PF_LINUX 
+  std::cout << "Target platform: Linux" << std::endl;
+#endif
+#ifdef PF_APPLE
+  std::cout << "Target platform: Apple" << std::endl;
+#endif
+#ifdef PF_UNKNOWN 
+  std::cout << "Target platform: Unknown" << std::endl;
+#endif
+
   // Initialize all engine subsystems in forward order. Note that this 
   // initialization order is important to avoid dependency issues between 
   // subsystems. 
