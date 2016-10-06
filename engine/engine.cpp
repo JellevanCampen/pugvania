@@ -2,8 +2,20 @@
 #include <iostream>
 #include <algorithm>
 #include "engine_config.h"
+#include "utility\patterns\reverse_iterator.h"
 
 namespace engine {
+
+Engine::Engine() {
+  // TODO(Jelle): load the engine configuration from a configuration file. 
+  // This is where all subsystems are dynamically allocated.
+}
+
+Engine::~Engine() {
+  // This is where all subsystems are freed. 
+  for (EngineSubsystem* subsystem : subsystems_)
+    delete subsystem;
+}
 
 void Engine::Initialize()	{
   std::cout << "Initializing Engine." << std::endl;
@@ -13,6 +25,12 @@ void Engine::Initialize()	{
     << ENGINE_VERSION_PATCH << "."
     << ENGINE_VERSION_TWEAK
     << std::endl;
+
+  // Initialize all engine subsystems in forward order. Note that this 
+  // initialization order is important to avoid dependency issues between 
+  // subsystems. 
+  for (EngineSubsystem* subsystem : subsystems_)
+    subsystem->Initialize();
 }
 
 void Engine::Start() {
@@ -33,6 +51,12 @@ void Engine::Stop() {
 
 void Engine::Terminate() {
   std::cout << "Terminating Engine." << std::endl;
+
+  // Terminate all engine subsystems in reverse order. Note that this 
+  // termination order is important to avoid dependency issues between 
+  // subsystems. 
+  for (EngineSubsystem* subsystem : reverse(subsystems_))
+    subsystem->Initialize();
 }
 
 void Engine::RunGameLoop() {
@@ -85,18 +109,18 @@ void Engine::Update(unsigned int delta_time_micros) {
   // Update game timing information first, as it is used by all other updates. 
   game_time_.Update(delta_time_micros);
 
-  // TODO(Jelle): Remove this when the flexible game loop is finilized. 
-  // std::cout << "Update (" << game_time_.GetUpdateCount() << "): total = " << game_time_.GetTotalTimeMicros() << ", delta = " << game_time_.GetDeltaTimeMicros() << std::endl;
-  std::cout << "UPS (" << game_time_.GetUpdateCount() << "):" << GetUpdateRate() << std::endl;
+  // Update all engine subsystems in forward order.
+  for (EngineSubsystem* subsystem : subsystems_)
+    subsystem->Update();
 }
 
 void Engine::Draw(float frame_interpolation) {
   // Update game timing information first, as it is used by all other draws. 
   game_time_.Draw(frame_interpolation);
 
-  // TODO(Jelle): Remove this when the flexible game loop is finilized. 
-  // std::cout << "Draw (" << game_time_.GetDrawCount() << "): total = " << game_time_.GetTotalTimeMicros() << ", interpolation = " << game_time_.GetFrameInterpolation() << std::endl;
-  std::cout << "FPS (" << game_time_.GetDrawCount() << "):" << GetDrawRate() << std::endl;
+  // Draw all engine subsystems in forward order.
+  for (EngineSubsystem* subsystem : subsystems_)
+    subsystem->Draw();
 }
 
 void Engine::SampleUpdateRate() {

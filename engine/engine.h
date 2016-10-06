@@ -3,14 +3,20 @@
 #define ENGINE_ENGINE_H_
 
 #include <chrono>
+#include <list>
 #include "utility\game_time.h"
+#include "engine_subsystem.h"
 
 namespace engine {
 
 // Encompasses all subsystems used to run the Game. It is responsible for 
 // subsystem initialization and termination, as well as running the game loop.
 class Engine {
-  public:
+ public:
+  // Allocates all Engine subsystems but does not perform initialization yet.
+  Engine();
+  // Frees all Engine subsystems after termination was performed.
+  ~Engine();
   // Initializes all engine subsystems. Must be called before starting the 
   // game loop or using any subsystem functionality.
   void Initialize();
@@ -75,6 +81,16 @@ class Engine {
   TimePointMicros draw_rate_sample_time_;
   float update_rate_{ 0.0f };
   float draw_rate_{ 0.0f };
+
+  // List of active engine subsystems. All subsystems in this list are 
+  // automatically initializes, updated, drawn, and terminated. (A list 
+  // is used as random access is not required, only forward and backward 
+  // iteration.) 
+  //
+  // In regard to memory management: the constructor of the Engine class 
+  // allocated all subsystems and the destructor of the Engine class takes 
+  // care of freeing the memory.
+  std::list<EngineSubsystem*> subsystems_;
 };
 
 } // namespace
