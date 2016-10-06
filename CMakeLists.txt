@@ -20,18 +20,29 @@ project (pugvania)
 #
 
 # Engine version
-set (engine_VERSION_MAJOR 0)
-set (engine_VERSION_MINOR 0)
-set (engine_VERSION_PATCH 2)
-set (engine_VERSION_TWEAK 0)
+set (ENGINE_VERSION_MAJOR "0")
+set (ENGINE_VERSION_MINOR "0")
+set (ENGINE_VERSION_PATCH "2")
+set (ENGINE_VERSION_TWEAK "0")
 
 # Game version
-set (game_VERSION_MAJOR 0)
-set (game_VERSION_MINOR 0)
-set (game_VERSION_PATCH 1)
-set (game_VERSION_TWEAK 0)
+set (GAME_VERSION_MAJOR 0)
+set (GAME_VERSION_MINOR 0)
+set (GAME_VERSION_PATCH 1)
+set (GAME_VERSION_TWEAK 0)
 
-# Pass version information to the Engine and Game projects via headers
+# Target platform information
+if (WIN32)
+	set (TARGET_PLATFORM_CODE 1)
+elseif (UNIX AND NOT APPLE)
+	set (TARGET_PLATFORM_CODE 2)
+elseif (APPLE)
+	set (TARGET_PLATFORM_CODE 3)
+else ()
+	set (TARGET_PLATFORM_CODE 0)
+endif ()
+
+# Pass this information to the Engine and Game projects via headers
 configure_file (
 	"engine/engine_config.h.in"
 	"engine/engine_config.h"
