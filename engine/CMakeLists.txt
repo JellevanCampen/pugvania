@@ -21,6 +21,9 @@ set (SRC_ENGINE_DEBUGGING
 	"debugging/logging.cpp"
 	"debugging/log_channel.h"
 	"debugging/log_channel.cpp"
+	"debugging/log_output.h"
+	"debugging/log_output_terminal.h"
+	"debugging/log_output_terminal.cpp"
 	)
 source_group (engine\\debugging FILES ${SRC_ENGINE_DEBUGGING})
 

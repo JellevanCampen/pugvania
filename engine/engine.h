@@ -7,7 +7,14 @@
 #include "utility\game_time.h"
 #include "engine_subsystem.h"
 
+#include "debugging\logging.h"
+
 namespace engine {
+
+// TODO(JELLE): Make the log function globally available in the engine 
+// namespace. 
+// The log function is made globally avaiable for ease of logging. 
+// void Log(std::string message, unsigned int channels = Logging::kLog_Default);
 
 // Encompasses all subsystems used to run the Game. It is responsible for 
 // subsystem initialization and termination, as well as running the game loop.
@@ -27,6 +34,7 @@ class Engine {
   // Terminates all engine subsystems. Must be called after the game loop is 
   // terminated. No more calls to subsystems are allowed beyond this point. 
   void Terminate();
+  const GameTime& GetGameTime() const { return game_time_; }
   float GetUpdateRate() const { return update_rate_; }
   float GetDrawRate() const { return draw_rate_; }
 
@@ -91,6 +99,8 @@ class Engine {
   // allocated all subsystems and the destructor of the Engine class takes 
   // care of freeing the memory.
   std::list<EngineSubsystem*> subsystems_;
+
+  Logging* subsystem_logging_{ NULL };
 };
 
 } // namespace

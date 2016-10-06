@@ -3,6 +3,8 @@
 #define ENGINE_DEBUGGING_LOGCHANNEL_H_
 
 #include <string>
+#include <forward_list>
+#include "log_output.h"
 
 namespace engine {
 
@@ -10,17 +12,21 @@ namespace engine {
 // output channel. 
 class LogChannel {
  public:
-   LogChannel(std::string name, std::string tag, bool timestamp = false)
+  LogChannel(std::string name, std::string tag, bool timestamp = false)
       : name_(name), 
         tag_(tag), 
         timestamp_(timestamp) {}
 
-   void Log(std::string message);
+  void Log(std::string message) const;
+
+  const std::string name_;
+  const std::string tag_;
+  const bool timestamp_{ false };
 
  private:
-  std::string name_;
-  std::string tag_;
-  bool timestamp_{ false };
+  // List of all output destinations this log channel should pipe messages 
+  // too. A forward list is used as forward iteration is the only requirement. 
+  // std::forward_list<LogOutput*> log_outputs_;
 };
 
 } // namespace

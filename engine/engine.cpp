@@ -9,6 +9,8 @@ namespace engine {
 Engine::Engine() {
   // TODO(Jelle): load the engine configuration from a configuration file. 
   // This is where all subsystems are dynamically allocated.
+  subsystem_logging_ = new Logging();
+  subsystems_.push_back(subsystem_logging_);
 }
 
 Engine::~Engine() {
