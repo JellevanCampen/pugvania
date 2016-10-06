@@ -5,15 +5,15 @@ namespace engine {
 void Logging::Initialize() {
   InitializeLogOutputs();
   InitializeLogChannels();
-  Log("Logging subsystem initialized.", kLog_Engine);
+  Log("Logging subsystem initialized.", log::kLog_Engine);
 }
 
 void Logging::Terminate() {
-  Log("Logging subsystem terminated.", kLog_Engine);
+  Log("Logging subsystem terminated.", log::kLog_Engine);
   log_channels_.clear();
 }
 
-void Logging::Log(std::string message, unsigned int channels) {
+void Logging::Log(std::string message, LogID channels) {
   unsigned int mask = 0b1;
   for (LogChannel log : log_channels_) {
     if (channels & mask)

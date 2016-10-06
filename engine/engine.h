@@ -14,7 +14,7 @@ namespace engine {
 // TODO(JELLE): Make the log function globally available in the engine 
 // namespace. 
 // The log function is made globally avaiable for ease of logging. 
-// void Log(std::string message, unsigned int channels = Logging::kLog_Default);
+// void Log(std::string message, LogID channels = log::kLog_Default);
 
 // Encompasses all subsystems used to run the Game. It is responsible for 
 // subsystem initialization and termination, as well as running the game loop.
