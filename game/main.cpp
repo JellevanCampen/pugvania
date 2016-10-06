@@ -16,6 +16,8 @@ int main()
 
   Engine* engine = Engine::get();
   engine->Initialize();
+  // This is an example of shorthand access to subsystems of the engine. 
+  engine->logging->Log("Starting the game loop.", log::kLog_Game);
   engine->Start();
   engine->Stop();
   engine->Terminate();

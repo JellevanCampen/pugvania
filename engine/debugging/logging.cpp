@@ -40,9 +40,12 @@ void Logging::InitializeLogChannels() {
   LogChannel ch_error("Error", "ERRO", true);
   ch_error.RegisterLogOutput(&log_output_terminal_);
   log_channels_.push_back(ch_error);
-  LogChannel ch_engine("Engine", "ENGI", true);
+  LogChannel ch_engine("Engine", "ENGI", false);
   ch_engine.RegisterLogOutput(&log_output_terminal_);
   log_channels_.push_back(ch_engine);
+  LogChannel ch_game("Game", "GAME", false);
+  ch_game.RegisterLogOutput(&log_output_terminal_);
+  log_channels_.push_back(ch_game);
 }
 
 void Logging::TerminateLogOutputs() {

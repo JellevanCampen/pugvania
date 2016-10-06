@@ -18,6 +18,7 @@ namespace log {
   static const LogID kLog_Warning{ 0b00000000000000000000000000000010 };
   static const LogID kLog_Error{   0b00000000000000000000000000000100 };
   static const LogID kLog_Engine{  0b00000000000000000000000000001000 };
+  static const LogID kLog_Game{    0b00000000000000000000000000010000 };
 }
 
 // Manages the logging of messages. Messages can be sent to different 

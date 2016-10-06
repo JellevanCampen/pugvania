@@ -56,6 +56,12 @@ class Engine {
   float GetUpdateRate() const { return update_rate_; }
   float GetDrawRate() const { return draw_rate_; }
 
+  // Unsafe access to all subsystems of the engine. These pointers are only 
+  // set when the submodules are initialized. The pointers are available to 
+  // provide shorthand access to subsystems in the engine namespace: 
+  // e.g. engine->logging 
+  Logging* logging{ NULL };
+
  private:
   // Allocates all Engine subsystems but does not perform initialization yet. 
   // Private constructor to ensure only a single Engine instance exists, 

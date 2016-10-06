@@ -6,13 +6,6 @@
 
 namespace engine {
 
-Engine::Engine() {
-  // TODO(Jelle): load the engine configuration from a configuration file. 
-  // This is where all subsystems are dynamically allocated.
-  subsystem_logging_ = new Logging();
-  subsystems_.push_back(subsystem_logging_);
-}
-
 Engine::~Engine() {
   // This is where all subsystems are freed. 
   for (EngineSubsystem* subsystem : subsystems_)
@@ -48,6 +41,9 @@ void Engine::Initialize()	{
   // subsystems. 
   for (EngineSubsystem* subsystem : subsystems_)
     subsystem->Initialize();
+
+  // Set the shorthand access pointers for all subsystems.
+  logging = subsystem_logging_;
 }
 
 void Engine::Start() {
@@ -69,11 +65,21 @@ void Engine::Stop() {
 void Engine::Terminate() {
   std::cout << "Terminating Engine." << std::endl;
 
+  // Reset the shorthand access pointers for all subsystems to nullpointers.
+  logging = NULL;
+
   // Terminate all engine subsystems in reverse order. Note that this 
   // termination order is important to avoid dependency issues between 
   // subsystems. 
   for (EngineSubsystem* subsystem : reverse(subsystems_))
-    subsystem->Initialize();
+    subsystem->Terminate();
+}
+
+Engine::Engine() {
+  // TODO(Jelle): load the engine configuration from a configuration file. 
+  // This is where all subsystems are dynamically allocated.
+  subsystem_logging_ = new Logging();
+  subsystems_.push_back(subsystem_logging_);
 }
 
 void Engine::RunGameLoop() {
