@@ -1,11 +1,17 @@
 #include "logging.h"
+#include "engine.h"
+#include <sstream>
 
 namespace engine {
 
 void Logging::Initialize() {
   InitializeLogOutputs();
   InitializeLogChannels();
-  Log("Logging subsystem initialized.", log::kLog_Engine);
+  
+  const void* adress = static_cast<const void*>(this);
+  std::stringstream init_message;
+  init_message << "Logging subsystem initialized at 0x" << adress;
+  Log(init_message.str(), log::kLog_Engine);
 }
 
 void Logging::Terminate() {

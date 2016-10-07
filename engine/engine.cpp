@@ -1,10 +1,27 @@
 #include "engine.h"
 #include <iostream>
+#include <string>
+#include <sstream>
 #include <algorithm>
 #include "engine_config.h"
 #include "utility\patterns\reverse_iterator.h"
 
 namespace engine {
+
+// Global reference to the Engine to make it more easily available. Note that 
+// this ease of access comes at the cost of safety. Accessing this global 
+// pointer before the Engine is created will return a nullpointer. 
+Engine* g_engine{ NULL };
+
+void g_log(std::string message, LogID channels) {
+  g_engine->logging->Log(message, channels);
+}
+
+Engine* Engine::get() {
+  static Engine instance;
+  g_engine = &instance;
+  return g_engine;
+}
 
 Engine::~Engine() {
   // This is where all subsystems are freed. 
@@ -44,6 +61,11 @@ void Engine::Initialize()	{
 
   // Set the shorthand access pointers for all subsystems.
   logging = subsystem_logging_;
+
+  const void* engine_adress = static_cast<const void*>(this);
+  std::stringstream init_message;
+  init_message << "Engine initialized at 0x" << engine_adress;
+  g_log(init_message.str(), log::kLog_Engine);
 }
 
 void Engine::Start() {

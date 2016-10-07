@@ -2,7 +2,7 @@
 #include "engine.h"
 #include "game_config.h"
 
-using namespace engine;
+using namespace::engine;
 
 int main()
 {
@@ -14,15 +14,12 @@ int main()
     << GAME_VERSION_TWEAK
     << std::endl;
 
-  Engine* engine = Engine::get();
-  engine->Initialize();
-  // This is an example of shorthand access to subsystems of the engine. 
-  engine->logging->Log("Starting the game loop.", log::kLog_Game);
-  engine->Start();
-  engine->Stop();
-  engine->Terminate();
-  
-  std::cin;
+  Engine* e = Engine::get();
+  e->Initialize();
+  g_log("Starting the game.", log::kLog_Game);
+  e->Start();
+  e->Stop();
+  e->Terminate();
 
   return 0;
 }

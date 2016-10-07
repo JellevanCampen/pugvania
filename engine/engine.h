@@ -4,6 +4,7 @@
 
 #include <chrono>
 #include <list>
+#include <iostream>
 #include "utility\game_time.h"
 #include "engine_subsystem.h"
 
@@ -11,15 +12,15 @@
 
 namespace engine {
 
-// Global reference to the Engine to make it more easilly available. Note that 
-// this ease of access comes at the cost of safety. Accessing this global 
-// pointer before the Engine is created will return a nullpointer. 
-static Engine* engine{ NULL };
+// Global reference to the Engine to make it more easily available. The 
+// variable is declared in the source file to avoid multiple definitions when 
+// including the engine.h header in other files. 
+extern Engine* g_engine;
 
 // TODO(JELLE): Make the log function globally available in the engine 
 // namespace. 
 // The log function is made globally avaiable for ease of logging. 
-// void Log(std::string message, LogID channels = log::kLog_Default);
+void g_log(std::string message, LogID channels = log::kLog_Default);
 
 // Encompasses all subsystems used to run the Game. It is responsible for 
 // subsystem initialization and termination, as well as running the game loop.
@@ -30,11 +31,7 @@ class Engine {
   // constructed. For easier access, a pointer to the access is stored 
   // globally in the engine:: namespace. Thus, making safe access: 
   // 'engine::Engine::Get()' and unsafe access: 'engine::engine'. 
-  static Engine* get() {
-    static Engine instance;
-    engine = &instance;
-    return engine;
-  }
+   static Engine* get();
 
   // Disallow use of the copy and assignment constructors to prevent creating 
   // multiple instances of the engine, following the singleton pattern. 
