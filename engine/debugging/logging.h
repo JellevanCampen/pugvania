@@ -29,8 +29,8 @@ class Logging : public EngineSubsystem{
  public:
   virtual void Initialize() override;
   virtual void Terminate() override;
-  virtual void Update() override { } // TODO(Jelle): Remove this, it is debug code to illustrate the logger
-  virtual void Draw() override { } // TODO(Jelle): Remove this, it is debug code to illustrate the logger
+  virtual void Update() override { }
+  virtual void Draw() override { }
   void Log(std::string message, LogID channels = log::kDefault);
 
  private:

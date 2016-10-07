@@ -17,8 +17,6 @@ namespace engine {
 // including the engine.h header in other files. 
 extern Engine* g_engine;
 
-// TODO(JELLE): Make the log function globally available in the engine 
-// namespace. 
 // The log function is made globally avaiable for ease of logging. 
 void g_log(std::string message, LogID channels = log::kDefault);
 
@@ -31,7 +29,7 @@ class Engine {
   // constructed. For easier access, a pointer to the access is stored 
   // globally in the engine:: namespace. Thus, making safe access: 
   // 'engine::Engine::Get()' and unsafe access: 'engine::engine'. 
-   static Engine* get();
+  static Engine* get();
 
   // Disallow use of the copy and assignment constructors to prevent creating 
   // multiple instances of the engine, following the singleton pattern. 
@@ -39,16 +37,10 @@ class Engine {
   void operator=(Engine const&) = delete;
   // Frees all Engine subsystems after termination was performed.
   ~Engine();
-  // Initializes all engine subsystems. Must be called before starting the 
-  // game loop or using any subsystem functionality.
-  void Initialize();
   // Starts the game loop.
   void Start();
   // Stops the game loop
   void Stop();
-  // Terminates all engine subsystems. Must be called after the game loop is 
-  // terminated. No more calls to subsystems are allowed beyond this point. 
-  void Terminate();
   const GameTime& GetGameTime() const { return game_time_; }
   float GetUpdateRate() const { return update_rate_; }
   float GetDrawRate() const { return draw_rate_; }
@@ -60,13 +52,18 @@ class Engine {
   Logging* logging{ NULL };
 
  private:
+  typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
+  typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
+
   // Allocates all Engine subsystems but does not perform initialization yet. 
   // Private constructor to ensure only a single Engine instance exists, 
   // following the singleton pattern. 
   Engine();
-
-  typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
-  typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
+  // Initializes all engine subsystems. Automatically called at construction 
+  // to assure all subsystems are initialized before the game loop is started.
+  void Initialize();
+  // Terminates all engine subsystems. Automatically called at deconstruction. 
+  void Terminate();
 
   // Rate at which to sample update timings to determine the update rate. 
   static const unsigned short int update_rate_sample_ = 10;

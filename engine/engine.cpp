@@ -18,12 +18,20 @@ void g_log(std::string message, LogID channels) {
 }
 
 Engine* Engine::get() {
+  // Construct the engine and all subsystems. 
   static Engine instance;
   g_engine = &instance;
+
+  // Initialize the engine and all subsystems automatically.
+  instance.Initialize();
+
   return g_engine;
 }
 
 Engine::~Engine() {
+  // Terminate the engine and all subsystems automatically on destruction.
+  Terminate();
+
   // This is where all subsystems are freed. 
   for (EngineSubsystem* subsystem : subsystems_)
     delete subsystem;
