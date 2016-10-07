@@ -3,6 +3,8 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include "boost/property_tree/ptree.hpp"
+#include "boost/property_tree/ini_parser.hpp"
 #include "engine_config.h"
 #include "utility\patterns\reverse_iterator.h"
 
@@ -70,6 +72,9 @@ void Engine::Initialize()	{
   // Set the shorthand access pointers for all subsystems.
   logging = subsystem_logging_;
 
+  // Load the engine configuration from engine_config.ini
+  LoadEngineConfig();
+
   const void* engine_adress = static_cast<const void*>(this);
   std::stringstream init_message;
   init_message << "Engine initialized at 0x" << engine_adress;
@@ -77,8 +82,6 @@ void Engine::Initialize()	{
 }
 
 void Engine::Start() {
-  // TODO(Jelle): load the game loop settings from a configuration file. 
-
   // Initialize the update and draw rate sampling times so that both rates can  
   // be measured from this point on. 
   update_rate_sample_time_ = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
@@ -90,6 +93,31 @@ void Engine::Start() {
 
 void Engine::Stop() {
   is_running_ = false;
+}
+
+void Engine::LoadEngineConfig()
+{
+  boost::property_tree::ptree pt;
+  try { 
+    boost::property_tree::ini_parser::read_ini("../../code/config/engine_config.ini", pt);
+    drawing_is_enabled_ = pt.get<bool>("engine.drawing_is_enabled", true);
+    update_time_step_is_fixed_ = pt.get<bool>("engine.update_time_step_is_fixed" , true);
+    time_step_micros_ = pt.get<unsigned int>("engine.time_step_micros", 1000000/60);
+    draw_rate_is_capped_ = pt.get<bool>("engine.draw_rate_is_capped", false);
+    max_frame_skip_ = pt.get<unsigned short int>("engine.max_frame_skip", 5);
+    update_rate_sample_ = pt.get<unsigned short int>("engine.update_rate_sample", 10);
+    draw_rate_sample_ = pt.get<unsigned short int>("engine.draw_rate_sample", 10);
+    rate_rolling_average_window_ = pt.get<unsigned short int>("engine.rate_rolling_average_window", 4);
+  } catch (boost::property_tree::ini_parser_error err) {
+    std::stringstream warning_message;
+    warning_message << "Error reading engine config, using default values. File ("
+      << err.filename()
+      << " at line "
+      << err.line()
+      << "): "
+      << err.message();
+    g_log(warning_message.str(), log::kWarning);
+  }
 }
 
 void Engine::Terminate() {
@@ -106,7 +134,6 @@ void Engine::Terminate() {
 }
 
 Engine::Engine() {
-  // TODO(Jelle): load the engine configuration from a configuration file. 
   // This is where all subsystems are dynamically allocated.
   subsystem_logging_ = new Logging();
   subsystems_.push_back(subsystem_logging_);
@@ -182,7 +209,7 @@ void Engine::SampleUpdateRate() {
     DurationMicros elapsed = (now - update_rate_sample_time_);
     update_rate_sample_time_ = now;
     float update_rate_current = update_rate_sample_ * 1000000.0f / ((float)elapsed.count());
-    update_rate_ = (update_rate_ * (update_rate_sample_ - 1) + (update_rate_current)) / update_rate_sample_;
+    update_rate_ = (update_rate_ * (rate_rolling_average_window_ - 1) + (update_rate_current)) / rate_rolling_average_window_;
   }
 }
 
@@ -192,7 +219,7 @@ void Engine::SampleDrawRate() {
     DurationMicros elapsed = (now - draw_rate_sample_time_);
     draw_rate_sample_time_ = now;
     float draw_rate_current = draw_rate_sample_ * 1000000.0f / ((float)elapsed.count());
-    draw_rate_ = (draw_rate_ * (draw_rate_sample_ - 1) + (draw_rate_current)) / draw_rate_sample_;
+    draw_rate_ = (draw_rate_ * (rate_rolling_average_window_ - 1) + (draw_rate_current)) / rate_rolling_average_window_;
   }
 }
 

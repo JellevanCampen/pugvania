@@ -63,15 +63,17 @@ class Engine {
   void Initialize();
   // Terminates all engine subsystems. Automatically called at deconstruction. 
   void Terminate();
+  // Loads the engine configuration from the engine_config.ini file. 
+  void LoadEngineConfig();
 
   // Rate at which to sample update timings to determine the update rate. 
-  static const unsigned short int update_rate_sample_ = 10;
+  unsigned short int update_rate_sample_{ 10 };
   // Rate at which to sample draw timings to determine the draw rate. 
-  static const unsigned short int draw_rate_sample_ = 10;
+  unsigned short int draw_rate_sample_{ 10 };
   // Size off the rolling average window used to smooth the update rate and 
   // draw rate measurements. A smaller window offers more precision but a 
   // higher amount of jitter. A larger window offers the opposite. 
-  static const unsigned short int rate_rolling_average_window = 4;
+  unsigned short int rate_rolling_average_window_{ 4 };
 
   // Runs the game loop using the specified settings.
   void RunGameLoop();
