@@ -3,6 +3,8 @@
 # Engine is a static library project containing engine code. 
 #
 
+message (STATUS "Configuring engine project (static library)")
+
 #
 # Import all source files and organize them in source groups.
 #
@@ -59,3 +61,14 @@ target_include_directories(engine PUBLIC "${PROJECT_BINARY_DIR}/engine")
 # Add the library's source directory as an include directory so that the Game 
 # project can find its headers when linking to Engine.
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+#
+# Make all required external libraries available
+#
+
+# [Boost]
+find_package(Boost 1.62.0 REQUIRED)
+if (Boost_FOUND)
+	target_include_directories(engine PUBLIC ${Boost_INCLUDE_DIRS})
+	target_link_libraries(engine PUBLIC ${Boost_LIBRARIES})
+endif (Boost_FOUND)

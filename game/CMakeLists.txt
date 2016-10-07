@@ -3,6 +3,8 @@
 # Game is an executable project containing game code. 
 #
 
+message (STATUS "Configuring game project (executable)")
+
 #
 # Import all source files and organize them in source groups.
 #

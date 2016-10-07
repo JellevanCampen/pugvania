@@ -7,7 +7,6 @@
 #include <iostream>
 #include "utility\game_time.h"
 #include "engine_subsystem.h"
-
 #include "debugging\logging.h"
 
 namespace engine {
