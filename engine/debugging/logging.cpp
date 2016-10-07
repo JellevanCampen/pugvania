@@ -11,11 +11,11 @@ void Logging::Initialize() {
   const void* adress = static_cast<const void*>(this);
   std::stringstream init_message;
   init_message << "Logging subsystem initialized at 0x" << adress;
-  Log(init_message.str(), log::kLog_Engine);
+  Log(init_message.str(), log::kEngine);
 }
 
 void Logging::Terminate() {
-  Log("Logging subsystem terminated.", log::kLog_Engine);
+  Log("Logging subsystem terminated.", log::kEngine);
   log_channels_.clear();
 }
 

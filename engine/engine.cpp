@@ -65,7 +65,7 @@ void Engine::Initialize()	{
   const void* engine_adress = static_cast<const void*>(this);
   std::stringstream init_message;
   init_message << "Engine initialized at 0x" << engine_adress;
-  g_log(init_message.str(), log::kLog_Engine);
+  g_log(init_message.str(), log::kEngine);
 }
 
 void Engine::Start() {

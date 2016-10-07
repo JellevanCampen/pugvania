@@ -16,7 +16,7 @@ int main()
 
   Engine* e = Engine::get();
   e->Initialize();
-  g_log("Starting the game.", log::kLog_Game);
+  g_log("Starting the game.", log::kGame);
   e->Start();
   e->Stop();
   e->Terminate();

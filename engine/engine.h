@@ -20,7 +20,7 @@ extern Engine* g_engine;
 // TODO(JELLE): Make the log function globally available in the engine 
 // namespace. 
 // The log function is made globally avaiable for ease of logging. 
-void g_log(std::string message, LogID channels = log::kLog_Default);
+void g_log(std::string message, LogID channels = log::kDefault);
 
 // Encompasses all subsystems used to run the Game. It is responsible for 
 // subsystem initialization and termination, as well as running the game loop.

@@ -14,11 +14,11 @@ typedef unsigned int LogID;
 
 namespace log {
   // The following constants are bit-masks for the various logging channels.
-  static const LogID kLog_Default{ 0b00000000000000000000000000000001 };
-  static const LogID kLog_Warning{ 0b00000000000000000000000000000010 };
-  static const LogID kLog_Error{   0b00000000000000000000000000000100 };
-  static const LogID kLog_Engine{  0b00000000000000000000000000001000 };
-  static const LogID kLog_Game{    0b00000000000000000000000000010000 };
+  static const LogID kDefault{ 0b00000000000000000000000000000001 };
+  static const LogID kWarning{ 0b00000000000000000000000000000010 };
+  static const LogID kError{   0b00000000000000000000000000000100 };
+  static const LogID kEngine{  0b00000000000000000000000000001000 };
+  static const LogID kGame{    0b00000000000000000000000000010000 };
 }
 
 // Manages the logging of messages. Messages can be sent to different 
@@ -31,7 +31,7 @@ class Logging : public EngineSubsystem{
   virtual void Terminate() override;
   virtual void Update() override { } // TODO(Jelle): Remove this, it is debug code to illustrate the logger
   virtual void Draw() override { } // TODO(Jelle): Remove this, it is debug code to illustrate the logger
-  void Log(std::string message, LogID channels = log::kLog_Default);
+  void Log(std::string message, LogID channels = log::kDefault);
 
  private:
    void InitializeLogOutputs();
