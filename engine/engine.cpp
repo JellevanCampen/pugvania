@@ -39,11 +39,11 @@ Engine::~Engine() {
     delete subsystem;
 }
 
-void Engine::Initialize()	{
+void Engine::Initialize() {
   // Note that standard console output is used here as the logging subsystem 
   // is not initialized yet. 
   std::cout << "Initializing Engine." << std::endl;
-  std::cout << "Version: " 
+  std::cout << "Version: "
     << ENGINE_VERSION_MAJOR << "."
     << ENGINE_VERSION_MINOR << "."
     << ENGINE_VERSION_PATCH << "."
@@ -51,16 +51,16 @@ void Engine::Initialize()	{
     << std::endl;
 
 #ifdef PF_WINDOWS 
-  std::cout << "Target platform: Windows" << std::endl;
+    std::cout << "Target platform: Windows" << std::endl;
 #endif
 #ifdef PF_LINUX 
-  std::cout << "Target platform: Linux" << std::endl;
+    std::cout << "Target platform: Linux" << std::endl;
 #endif
 #ifdef PF_APPLE
-  std::cout << "Target platform: Apple" << std::endl;
+    std::cout << "Target platform: Apple" << std::endl;
 #endif
 #ifdef PF_UNKNOWN 
-  std::cout << "Target platform: Unknown" << std::endl;
+    std::cout << "Target platform: Unknown" << std::endl;
 #endif
 
   // Initialize all engine subsystems in forward order. Note that this 
@@ -99,19 +99,20 @@ void Engine::Stop() {
 void Engine::LoadEngineConfig()
 {
   boost::property_tree::ptree pt;
-  try { 
+  try {
     boost::property_tree::ini_parser::read_ini((*path)["config"] + "engine_config.ini", pt);
     drawing_is_enabled_ = pt.get<bool>("engine.drawing_is_enabled", true);
-    update_time_step_is_fixed_ = pt.get<bool>("engine.update_time_step_is_fixed" , true);
-    time_step_micros_ = pt.get<unsigned int>("engine.time_step_micros", 1000000/60);
+    update_time_step_is_fixed_ = pt.get<bool>("engine.update_time_step_is_fixed", true);
+    time_step_micros_ = pt.get<unsigned int>("engine.time_step_micros", 1000000 / 60);
     draw_rate_is_capped_ = pt.get<bool>("engine.draw_rate_is_capped", false);
     max_frame_skip_ = pt.get<unsigned short int>("engine.max_frame_skip", 5);
     update_rate_sample_ = pt.get<unsigned short int>("engine.update_rate_sample", 10);
     draw_rate_sample_ = pt.get<unsigned short int>("engine.draw_rate_sample", 10);
     rate_rolling_average_window_ = pt.get<unsigned short int>("engine.rate_rolling_average_window", 4);
-  } catch (boost::property_tree::ini_parser_error err) {
+  }
+  catch (boost::property_tree::ini_parser_error err) {
     std::stringstream warning_message;
-    warning_message << "Error reading engine config, using default values. File ("
+    warning_message << "Error reading engine game loop configuration, using default values. File ("
       << err.filename()
       << " at line "
       << err.line()
@@ -136,11 +137,64 @@ void Engine::Terminate() {
 }
 
 Engine::Engine() {
-  // This is where all subsystems are dynamically allocated.
+  // Load the Path subsystem first. Note: the Path subsystem and the Logging 
+  // subsystem are special cases of subsystems as many other subsystems make 
+  // use of them. Therefore they are loaded as fast as possible before other 
+  // subsystems. In this case the loading of Path needs to be hardcoded, as 
+  // the path subsystem itself is used to retrieve the engine configuration. 
+  // Logger is loaded in second to make sure all other subsystems can log 
+  // initialization errors. 
   subsystem_path_ = new Path();
   subsystems_.push_back(subsystem_path_);
   subsystem_logging_ = new Logging();
   subsystems_.push_back(subsystem_logging_);
+
+  // TODO(Jelle): remove this once a configurable subsystem is added. This is 
+  // example code. 
+  //// Load the engine subsystem configuration
+  //boost::property_tree::ptree pt;
+  //std::string subsystem_subsystemname_implementation;
+  //try {
+  //  boost::property_tree::ini_parser::read_ini((*path)["config"] + "engine_config.ini", pt);
+  //  subsystem_subsystemname_implementation = pt.get<std::string>("subsystems.subsystemname", "default_implementation");
+  //}
+  //catch (boost::property_tree::ini_parser_error err) {
+  //  std::stringstream warning_message;
+  //  warning_message << "Error reading engine subsystem configuration, using default values. File ("
+  //    << err.filename()
+  //    << " at line "
+  //    << err.line()
+  //    << "): "
+  //    << err.message();
+  //  // Printing the warning directly to the console as the Logging subsystem is 
+  //  // not initialized yet. 
+  //  std::cout << warning_message.str() << std::endl;
+  //}
+
+  //// Create all subsystems in forward order. Don't initialize them yet.
+  //subsystem_subsystemname_ = CreateSubsystem_Subsystemname(subsystem_subsystemname_implementation);
+  //subsystems_.push_back(subsystem_subsystemname);
+}
+
+// TODO(Jelle): remove this once a configurable subsystem is added. This is 
+// example code. 
+//SubsystemName* CreateSubsystem_SubsystemName(std::string implementation) {
+//  if (implementation.compare("default") == 0)
+//    return new Logging();
+//  ShowSubsystemError("logging", implementation);
+//}
+
+void Engine::ShowSubsystemError(std::string subsystem_name, std::string implementation) {
+  // Printing the error directly to the console as the Logging subsystem is 
+  // not initialized yet. 
+  std::cout << "Error loading " << subsystem_name << " subsystem. '"
+    << implementation << "' does not match a known " 
+    << subsystem_name << " subsystem implementation."
+    << std::endl
+    << "Press any key to shut down the engine."
+    << std::endl;
+  std::cin.get();
+  exit(1);
 }
 
 void Engine::RunGameLoop() {

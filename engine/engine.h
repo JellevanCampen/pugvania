@@ -60,6 +60,13 @@ class Engine {
   // Private constructor to ensure only a single Engine instance exists, 
   // following the singleton pattern. 
   Engine();
+  // Factory functions for all subsystems. As multiple implementations can 
+  // exist for each subsystem, the correct one is created at initlialization. 
+  // TODO(Jelle): remove this once a configurable subsystem is added. This is 
+  // example code. 
+  //SubsystemName* CreateSubsystem_SubsystemName(std::string implementation);
+  void ShowSubsystemError(std::string subsystem_name, std::string implementation);
+
   // Initializes all engine subsystems. Automatically called at construction 
   // to assure all subsystems are initialized before the game loop is started.
   void Initialize();
@@ -67,16 +74,6 @@ class Engine {
   void Terminate();
   // Loads the engine configuration from the engine_config.ini file. 
   void LoadEngineConfig();
-
-  // Rate at which to sample update timings to determine the update rate. 
-  unsigned short int update_rate_sample_{ 10 };
-  // Rate at which to sample draw timings to determine the draw rate. 
-  unsigned short int draw_rate_sample_{ 10 };
-  // Size off the rolling average window used to smooth the update rate and 
-  // draw rate measurements. A smaller window offers more precision but a 
-  // higher amount of jitter. A larger window offers the opposite. 
-  unsigned short int rate_rolling_average_window_{ 4 };
-
   // Runs the game loop using the specified settings.
   void RunGameLoop();
   // Updates the game world. Sends requests to all subsystems and game objects 
@@ -109,6 +106,15 @@ class Engine {
   // The maximum of draws to drop before forcedly rendering one, in case the 
   // update + draw time is longer than the desired fixed update rate. 
   unsigned short int max_frame_skip_{ 5 };
+
+  // Rate at which to sample update timings to determine the update rate. 
+  unsigned short int update_rate_sample_{ 10 };
+  // Rate at which to sample draw timings to determine the draw rate. 
+  unsigned short int draw_rate_sample_{ 10 };
+  // Size off the rolling average window used to smooth the update rate and 
+  // draw rate measurements. A smaller window offers more precision but a 
+  // higher amount of jitter. A larger window offers the opposite. 
+  unsigned short int rate_rolling_average_window_{ 4 };
   // Holds the time of the last sampled update.
   TimePointMicros update_rate_sample_time_;
   // Holds the time of the last sampled draw.
