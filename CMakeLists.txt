@@ -42,6 +42,9 @@ else ()
 	set (TARGET_PLATFORM_CODE 0)
 endif ()
 
+# Root directory information
+set (ROOT_DIRECTORY "../../code/")
+
 # Pass this information to the Engine and Game projects via headers
 configure_file (
 	"engine/engine_config.h.in"
@@ -50,6 +53,10 @@ configure_file (
 configure_file (
 	"game/game_config.h.in"
 	"game/game_config.h"
+)
+configure_file (
+	"engine/utility/path.h.in"
+	"engine/utility/path.h"
 )
 
 #

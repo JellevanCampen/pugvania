@@ -1,0 +1,28 @@
+#pragma once
+#ifndef ENGINE_UTILITY_PATH_H_
+#define ENGINE_UTILITY_PATH_H_
+
+#include <string>
+#include <unordered_map>
+
+namespace engine {
+
+// Path configuration, used to find the project root directory and to find the 
+// relative path to resource directories. 
+class Path {
+ public:
+  // The constructor loads the path configuration from the path_config.ini file 
+  // in the project root directory.
+  Path();
+
+  const std::string& operator[](const std::string directory) const;
+
+ private:
+  // Path to the project root directory (configured in top-level CMakeLists.txt). 
+  std::string root_{ "${ROOT_DIRECTORY}" };
+  std::unordered_map<std::string,std::string> directories_;
+};
+
+} // namespace
+
+#endif // ENGINE_UTILITY_PATH_H_
