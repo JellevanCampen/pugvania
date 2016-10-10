@@ -1,6 +1,7 @@
 #include "utility\path.h"
 #include <sstream>
 #include <iostream>
+#include <fstream>
 #include "boost/property_tree/ptree.hpp"
 #include "boost/property_tree/ini_parser.hpp"
 #include <boost/algorithm/string.hpp>
@@ -35,9 +36,26 @@ void Path::Initialize() {
     // Printing the error directly to the console as the Path subsystem is 
     // initialized before the logger. 
     std::cout << error_message.str() << std::endl;
-    // TODO(Jelle): Offer to create a test file to indicate what directory the 
-    // engine considers its root directory. Shut down the Engine afterwards as 
-    // this is a critical error. 
+    // Offer to create a test file to indicate what directory the engine 
+    // considers its root directory. Shut down the Engine afterwards as this 
+    // is a critical error. 
+    std::string response;
+    std::cout << "The path_config.ini file should be located in the project " 
+      "root directory. This directory is configured in the top-level "
+      "CMakeLists.txt file as ROOT_DIRECTORY. It is most likely incorrectly " 
+      "configured. Would you like the engine to create a test file to "
+      "indicate what directory it considers the root directory? Search for " 
+      "ROOT_DIRECTORY to find the file." 
+      << std::endl;
+    do {
+      std::cout << "(Y/N) >> ";
+      std::cin >> response;
+    } while (response.compare("Y") != 0 && response.compare("N") != 0);
+    if (response.compare("Y") == 0) {
+      std::ofstream file(root_ + "ROOT_DIRECTORY");
+      file.close();
+    }
+    exit(1);
   }
 }
 
@@ -46,6 +64,8 @@ void Path::Terminate() {
 }
 
 std::string Path::operator[](const std::string directory) const {
+  if (directory.compare("root") == 0)
+    return root_;
   if (directories_.count(directory) == 0) {
     std::stringstream error_message;
     std::string dir{ directory };

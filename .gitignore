@@ -1,0 +1,3 @@
+# ROOT_DIRECTORY is created by the engine to help configure the engine root 
+# directory if path_config.ini could not be found.
+**/ROOT_DIRECTORY
