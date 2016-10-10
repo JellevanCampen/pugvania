@@ -19,7 +19,7 @@ class Path : public EngineSubsystem{
   virtual void Update() override { }
   virtual void Draw() override { }
 
-  const std::string& operator[](const std::string directory) const;
+  std::string operator[](const std::string directory) const;
 
  private:
   // Path to the project root directory (configured in top-level CMakeLists.txt). 

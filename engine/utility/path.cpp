@@ -45,7 +45,7 @@ void Path::Terminate() {
   std::cout << "Logging subsystem terminated." << std::endl;
 }
 
-const std::string & Path::operator[](const std::string directory) const {
+std::string Path::operator[](const std::string directory) const {
   if (directories_.count(directory) == 0) {
     std::stringstream error_message;
     std::string dir{ directory };
