@@ -53,7 +53,7 @@ const std::string & Path::operator[](const std::string directory) const {
     error_message << dir << "_DIRECTORY_NOT_FOUND";
     return error_message.str();
   }
-  return directories_.at(directory);
+  return root_ + directories_.at(directory);
 }
 
 } // namespace
