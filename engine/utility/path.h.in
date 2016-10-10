@@ -4,16 +4,20 @@
 
 #include <string>
 #include <unordered_map>
+#include "engine_subsystem.h"
 
 namespace engine {
 
 // Path configuration, used to find the project root directory and to find the 
 // relative path to resource directories. 
-class Path {
+class Path : public EngineSubsystem{
  public:
   // The constructor loads the path configuration from the path_config.ini file 
-  // in the project root directory.
-  Path();
+  // in the project root directory.  
+  virtual void Initialize() override;
+  virtual void Terminate() override;
+  virtual void Update() override { }
+  virtual void Draw() override { }
 
   const std::string& operator[](const std::string directory) const;
 

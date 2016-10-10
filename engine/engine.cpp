@@ -70,6 +70,7 @@ void Engine::Initialize()	{
     subsystem->Initialize();
 
   // Set the shorthand access pointers for all subsystems.
+  path = subsystem_path_;
   logging = subsystem_logging_;
 
   // Load the engine configuration from engine_config.ini
@@ -126,6 +127,7 @@ void Engine::Terminate() {
 
   // Reset the shorthand access pointers for all subsystems to nullpointers.
   logging = NULL;
+  path = NULL;
 
   // Terminate all engine subsystems in reverse order. Note that this 
   // termination order is important to avoid dependency issues between 
@@ -136,6 +138,8 @@ void Engine::Terminate() {
 
 Engine::Engine() {
   // This is where all subsystems are dynamically allocated.
+  subsystem_path_ = new Path();
+  subsystems_.push_back(subsystem_path_);
   subsystem_logging_ = new Logging();
   subsystems_.push_back(subsystem_logging_);
 }

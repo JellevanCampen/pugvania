@@ -6,6 +6,7 @@
 #include <list>
 #include <iostream>
 #include "utility\game_time.h"
+#include "utility\path.h"
 #include "engine_subsystem.h"
 #include "debugging\logging.h"
 
@@ -48,6 +49,7 @@ class Engine {
   // set when the submodules are initialized. The pointers are available to 
   // provide shorthand access to subsystems in the engine namespace: 
   // e.g. engine->logging 
+  Path* path{ NULL };
   Logging* logging{ NULL };
 
  private:
@@ -124,6 +126,7 @@ class Engine {
   // care of freeing the memory.
   std::list<EngineSubsystem*> subsystems_;
 
+  Path* subsystem_path_{ NULL };
   Logging* subsystem_logging_{ NULL };
 };
 
