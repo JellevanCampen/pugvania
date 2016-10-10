@@ -99,6 +99,7 @@ void Engine::LoadEngineConfig()
 {
   boost::property_tree::ptree pt;
   try { 
+    // TODO(Jelle): the path to the config directory should be loaded from the path configuration file
     boost::property_tree::ini_parser::read_ini("../../code/config/engine_config.ini", pt);
     drawing_is_enabled_ = pt.get<bool>("engine.drawing_is_enabled", true);
     update_time_step_is_fixed_ = pt.get<bool>("engine.update_time_step_is_fixed" , true);
