@@ -35,6 +35,8 @@ set (SRC_ENGINE_UTILITY
 	"utility/game_time.cpp"
 	"utility/windows_terminal_colors.h"
 	"utility/path.cpp"
+	"utility/config_file.h"
+	"utility/config_file.cpp"
 	)
 source_group (engine\\utility FILES ${SRC_ENGINE_UTILITY})
 
