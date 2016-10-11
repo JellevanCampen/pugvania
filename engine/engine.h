@@ -12,43 +12,34 @@
 
 namespace engine {
 
-// Global reference to the Engine to make it more easily available. The 
-// variable is declared in the source file to avoid multiple definitions when 
-// including the engine.h header in other files. 
+// Global pointer to the engine. Safe to use after Create() is called and 
+// before Destroy() is called. (Implementation note: the variable is declared 
+// in the source file to avoid multiple definitions when including the 
+// engine.h header in other files.)  
 extern Engine* g_engine;
 
-// The log function is made globally avaiable for ease of logging. 
+// Global log function. Safe to use after Create() is called and before 
+// Destroy() is called.
 void g_log(std::string message, LogID channels = log::kDefault);
 
-// Encompasses all subsystems used to run the Game. It is responsible for 
-// subsystem initialization and termination, as well as running the game loop.
+// Manages the game loop and all subsystems used to run the Game. 
 class Engine {
  public:
-  // Instantiates (if necessary) the Engine singleton and returns is. Note 
-  // that this is the safest way to access the Engine, at is guaranteed to be 
-  // constructed. For easier access, a pointer to the access is stored 
-  // globally in the engine:: namespace. Thus, making safe access: 
-  // 'engine::Engine::Get()' and unsafe access: 'engine::engine'. 
-  static Engine* get();
-
-  // Disallow use of the copy and assignment constructors to prevent creating 
-  // multiple instances of the engine, following the singleton pattern. 
   Engine(Engine const&) = delete;
-  void operator=(Engine const&) = delete;
-  // Frees all Engine subsystems after termination was performed.
-  ~Engine();
-  // Starts the game loop.
+  void operator=(const Engine&) = delete;
+  
+  static void Create();
+  static void Destroy();
+  
   void Start();
-  // Stops the game loop
   void Stop();
+
   const GameTime& GetGameTime() const { return game_time_; }
   float GetUpdateRate() const { return update_rate_; }
   float GetDrawRate() const { return draw_rate_; }
 
-  // Unsafe access to all subsystems of the engine. These pointers are only 
-  // set when the submodules are initialized. The pointers are available to 
-  // provide shorthand access to subsystems in the engine namespace: 
-  // e.g. engine->logging 
+  // Pointers that give access to all engine subsystems. Safe to use after 
+  // Create() was called and before Destroy() was called. 
   Path* path{ NULL };
   Logging* logging{ NULL };
 
@@ -59,34 +50,30 @@ class Engine {
   // Allocates all Engine subsystems but does not perform initialization yet. 
   // Private constructor to ensure only a single Engine instance exists, 
   // following the singleton pattern. 
-  Engine();
-  // Factory functions for all subsystems. As multiple implementations can 
-  // exist for each subsystem, the correct one is created at initlialization. 
-  // TODO(Jelle): remove this once a configurable subsystem is added. This is 
-  // example code. 
-  //SubsystemName* CreateSubsystem_SubsystemName(std::string implementation);
-  void ShowSubsystemError(std::string subsystem_name, std::string implementation);
-
-  // Initializes all engine subsystems. Automatically called at construction 
-  // to assure all subsystems are initialized before the game loop is started.
+  Engine() { }
+  ~Engine() { }
+  void CreateSubsystems();
+  void DestroySubsystems();
   void Initialize();
-  // Terminates all engine subsystems. Automatically called at deconstruction. 
   void Terminate();
-  // Loads the engine configuration from the engine_config.ini file. 
-  void LoadEngineConfig();
-  // Runs the game loop using the specified settings.
+
+  void LoadEngineConfiguration();
   void RunGameLoop();
-  // Updates the game world. Sends requests to all subsystems and game objects 
-  // to update themselves. 
   void Update(unsigned int delta_time_micros);
-  // Draws the game world. Sends requests to all subsystems and game objects 
-  // to draw themselves.
   void Draw(float frame_interpolation);
+
   void SampleUpdateRate();
   void SampleDrawRate();
 
+  std::list<EngineSubsystem*> subsystems_;
+
   bool is_running_{ false };
   GameTime game_time_{ };
+  TimePointMicros update_rate_sample_time_;
+  TimePointMicros draw_rate_sample_time_;
+  float update_rate_{ 0.0f };
+  float draw_rate_{ 0.0f };
+
   // Whether or not output should be drawn on screen. Can be disabled to speed 
   // up simulations by only performing updates. 
   bool drawing_is_enabled_{ true };
@@ -115,25 +102,6 @@ class Engine {
   // draw rate measurements. A smaller window offers more precision but a 
   // higher amount of jitter. A larger window offers the opposite. 
   unsigned short int rate_rolling_average_window_{ 4 };
-  // Holds the time of the last sampled update.
-  TimePointMicros update_rate_sample_time_;
-  // Holds the time of the last sampled draw.
-  TimePointMicros draw_rate_sample_time_;
-  float update_rate_{ 0.0f };
-  float draw_rate_{ 0.0f };
-
-  // List of active engine subsystems. All subsystems in this list are 
-  // automatically initializes, updated, drawn, and terminated. (A list 
-  // is used as random access is not required, only forward and backward 
-  // iteration.) 
-  //
-  // In regard to memory management: the constructor of the Engine class 
-  // allocated all subsystems and the destructor of the Engine class takes 
-  // care of freeing the memory.
-  std::list<EngineSubsystem*> subsystems_;
-
-  Path* subsystem_path_{ NULL };
-  Logging* subsystem_logging_{ NULL };
 };
 
 } // namespace
