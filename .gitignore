@@ -1,3 +1,6 @@
 # ROOT_DIRECTORY is created by the engine to help configure the engine root 
 # directory if path_config.ini could not be found.
 **/ROOT_DIRECTORY
+
+# The log directory contains log files created by the engine. 
+log/*.log

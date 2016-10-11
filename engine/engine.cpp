@@ -248,6 +248,11 @@ void Engine::Update(unsigned int delta_time_micros) {
   // Update all engine subsystems in forward order.
   for (EngineSubsystem* subsystem : subsystems_)
     subsystem->Update();
+
+  // TODO(Jelle): Remove this later. This is temporary code to shut down the 
+  // engine after 5 seconds for debugging purposes.
+  if (game_time_.GetTotalTimeMicros() >= 5000000)
+    Stop();
 }
 
 void Engine::Draw(float frame_interpolation) {

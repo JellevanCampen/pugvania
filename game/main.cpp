@@ -18,5 +18,8 @@ int main()
   g_log("Starting the game.", log::kGame);
   e->Start();
 
+  std::cout << "Press enter to terminate the game... ";
+  std::cin.get();
+
   return 0;
 }

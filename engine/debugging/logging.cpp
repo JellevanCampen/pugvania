@@ -16,6 +16,7 @@ void Logging::Initialize() {
 
 void Logging::Terminate() {
   Log("Logging subsystem terminated.", log::kEngine);
+  TerminateLogOutputs();
   log_channels_.clear();
 }
 
@@ -30,6 +31,7 @@ void Logging::Log(std::string message, LogID channels) {
 
 void Logging::InitializeLogOutputs() {
   log_outputs_.push_back(&log_output_terminal_);
+  log_outputs_.push_back(&log_output_globalfile_);
 
   for (auto out : log_outputs_)
     out->Initialize();
@@ -62,7 +64,9 @@ void Logging::InitializeLogChannel(std::string channel, const ConfigFile & confi
   LogChannel log_channel(name, tag, timestamp);
   if (out_terminal)
     log_channel.RegisterLogOutput(&log_output_terminal_);
-  // TODO(Jelle): register other log outputs here once thez have beenm implemented
+  if (out_globalfile)
+    log_channel.RegisterLogOutput(&log_output_globalfile_);
+  // TODO(Jelle): register other log outputs here once thez have been implemented
   log_channels_.push_back(log_channel);
 }
 
