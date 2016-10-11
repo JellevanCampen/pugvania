@@ -8,6 +8,7 @@
 #include "utility\config_file.h"
 #include "log_channel.h"
 #include "log_output_terminal.h"
+#include "log_output_files.h"
 #include "log_output_globalfile.h"
 
 namespace engine {
@@ -42,6 +43,7 @@ class Logging : public EngineSubsystem{
    void TerminateLogOutputs();
 
    LogOutputTerminal log_output_terminal_;
+   LogOutputFiles log_output_files_;
    LogOutputGlobalFile log_output_globalfile_;
    std::list<LogOutput*> log_outputs_;
    std::list<LogChannel> log_channels_;

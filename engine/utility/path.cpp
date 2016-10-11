@@ -16,7 +16,7 @@ void Path::Initialize() {
     // Iterate over all keys in the paths section of path_config.ini and add 
     // them to the map
     for (auto path : pt.get_child("paths"))
-      directories_.insert(std::pair<std::string, std::string>(path.first, path.second.data()));
+      directories_.emplace(path.first, path.second.data());
 
     const void* adress = static_cast<const void*>(this);
     std::stringstream init_message;

@@ -31,12 +31,16 @@ Engine* Engine::get() {
 }
 
 Engine::~Engine() {
+  g_log("Engine terminating.", log::kEngine);
+
   // Terminate the engine and all subsystems automatically on destruction.
   Terminate();
 
   // This is where all subsystems are freed. 
   for (EngineSubsystem* subsystem : subsystems_)
     delete subsystem;
+
+  g_engine = NULL;
 }
 
 void Engine::Initialize() {
@@ -121,15 +125,15 @@ void Engine::LoadEngineConfig()
 void Engine::Terminate() {
   std::cout << "Terminating Engine." << std::endl;
 
-  // Reset the shorthand access pointers for all subsystems to nullpointers.
-  logging = NULL;
-  path = NULL;
-
   // Terminate all engine subsystems in reverse order. Note that this 
   // termination order is important to avoid dependency issues between 
   // subsystems. 
   for (EngineSubsystem* subsystem : reverse(subsystems_))
     subsystem->Terminate();
+
+  // Reset the shorthand access pointers for all subsystems to nullpointers.
+  logging = NULL;
+  path = NULL;
 }
 
 Engine::Engine() {
