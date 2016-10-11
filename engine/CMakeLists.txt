@@ -33,29 +33,42 @@ set (SRC_ENGINE_DEBUGGING
 	)
 source_group (engine\\debugging FILES ${SRC_ENGINE_DEBUGGING})
 
-# [ engine/utility ]
-set (SRC_ENGINE_UTILITY 
-	"utility/game_time.h"
-	"utility/game_time.cpp"
-	"utility/windows_terminal_colors.h"
-	"utility/path.cpp"
-	"utility/config_file.h"
-	"utility/config_file.cpp"
+# [ engine/common ]
+set (SRC_ENGINE_COMMON 
+	"common/game_time.h"
+	"common/game_time.cpp"
 	)
-source_group (engine\\utility FILES ${SRC_ENGINE_UTILITY})
+source_group (engine\\common FILES ${SRC_ENGINE_COMMON})
 
-# [ engine/utility/patterns ]
-set (SRC_ENGINE_UTILITY_PATTERNS 
-	"utility/patterns/reverse_iterator.h"
+# [ engine/common/datatypes ]
+set (SRC_ENGINE_COMMON_DATATYPES 
+	"common/datatypes/color_types.h"
 	)
-source_group (engine\\utility\\patterns FILES ${SRC_ENGINE_UTILITY_PATTERNS})
+source_group (engine\\common\\datatypes FILES ${SRC_ENGINE_COMMON_DATATYPES})
+
+# [ engine/common/patterns ]
+set (SRC_ENGINE_COMMON_PATTERNS 
+	"common/patterns/reverse_iterator.h"
+	)
+source_group (engine\\common\\patterns FILES ${SRC_ENGINE_COMMON_PATTERNS})
+
+# [ engine/common/utility ]
+set (SRC_ENGINE_COMMON_UTILITY 
+	"common/utility/config_file.cpp"
+	"common/utility/config_file.h"
+	"common/utility/path.cpp"
+	"common/utility/windows_terminal_colors.h"
+	)
+source_group (engine\\common\\utility FILES ${SRC_ENGINE_COMMON_UTILITY})
 
 # [ <ALL> ]
 set (SRC_ALL
 	${SRC_ENGINE}
 	${SRC_ENGINE_DEBUGGING}
-	${SRC_ENGINE_UTILITY}
-	${SRC_ENGINE_UTILITY_PATTERNS}
+	${SRC_ENGINE_COMMON}
+	${SRC_ENGINE_COMMON_DATATYPES}
+	${SRC_ENGINE_COMMON_PATTERNS}
+	${SRC_ENGINE_COMMON_UTILITY}
 	)
 
 # Make Engine static library project

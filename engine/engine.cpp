@@ -6,7 +6,7 @@
 #include "boost/property_tree/ptree.hpp"
 #include "boost/property_tree/ini_parser.hpp"
 #include "engine_config.h"
-#include "utility\patterns\reverse_iterator.h"
+#include "common/patterns/reverse_iterator.h"
 
 namespace engine {
 

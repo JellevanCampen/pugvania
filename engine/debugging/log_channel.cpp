@@ -1,5 +1,4 @@
 #include "log_channel.h"
-#include <iostream> // TODO(JELLE): Remove this import when LogOutput is fixed
 #include "log_output.h"
 
 namespace engine {

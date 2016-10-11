@@ -5,10 +5,10 @@
 #include <chrono>
 #include <list>
 #include <iostream>
-#include "utility\game_time.h"
-#include "utility\path.h"
+#include "common/game_time.h"
+#include "common/utility/path.h"
 #include "engine_subsystem.h"
-#include "debugging\logging.h"
+#include "debugging/logging.h"
 
 namespace engine {
 

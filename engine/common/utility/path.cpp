@@ -1,4 +1,4 @@
-#include "utility\path.h"
+#include "common/utility/path.h"
 #include <sstream>
 #include <iostream>
 #include <fstream>
@@ -60,7 +60,7 @@ void Path::Initialize() {
 }
 
 void Path::Terminate() {
-  std::cout << "Logging subsystem terminated." << std::endl;
+  std::cout << "Path subsystem terminating." << std::endl;
 }
 
 std::string Path::operator[](const std::string directory) const {

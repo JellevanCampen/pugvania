@@ -1,0 +1,11 @@
+#pragma once
+#ifndef ENGINE_COMMON_DATATYPES_COLORTYPES_H_
+#define ENGINE_COMMON_DATATYPES_COLORTYPES_H_
+
+namespace engine {
+
+
+
+} // namespace
+
+#endif // ENGINE_COMMON_DATATYPES_COLORTYPES_H_

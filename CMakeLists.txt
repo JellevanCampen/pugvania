@@ -55,8 +55,8 @@ configure_file (
 	"game/game_config.h"
 )
 configure_file (
-	"engine/utility/path.h.in"
-	"engine/utility/path.h"
+	"engine/common/utility/path.h.in"
+	"engine/common/utility/path.h"
 )
 
 #

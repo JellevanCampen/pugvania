@@ -1,9 +1,9 @@
 #pragma once
-#ifndef ENGINE_UTILITY_CONFIGFILE_H_
-#define ENGINE_UTILITY_CONFIGFILE_H_
+#ifndef ENGINE_COMMON_UTILITY_CONFIGFILE_H_
+#define ENGINE_COMMON_UTILITY_CONFIGFILE_H_
 
 #include <string>
-#include "boost\property_tree\ptree.hpp"
+#include "boost/property_tree/ptree.hpp"
 
 namespace engine {
 
@@ -57,4 +57,4 @@ class ConfigFile {
 
 } // namespace
 
-#endif // ENGINE_UTILITY_CONFIGFILE_H_
+#endif // ENGINE_COMMON_UTILITY_CONFIGFILE_H_

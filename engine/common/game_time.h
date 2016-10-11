@@ -1,6 +1,6 @@
 #pragma once
-#ifndef ENGINE_UTILITY_GAMETIME_H_
-#define ENGINE_UTILITY_GAMETIME_H_
+#ifndef ENGINE_COMMON_GAMETIME_H_
+#define ENGINE_COMMON_GAMETIME_H_
 
 namespace engine {
 
@@ -43,4 +43,4 @@ class GameTime {
 
 } // namespace
 
-#endif // ENGINE_UTILITY_GAMETIME_H_
+#endif // ENGINE_COMMON_GAMETIME_H_
