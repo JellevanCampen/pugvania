@@ -12,7 +12,7 @@ ConfigFile::ConfigFile(std::string filename, ErrorHandling file_error_handling, 
   property_error_handling_ = property_error_handling;
   
   // Select the correct parser depending on the filetype
-  std::string extension = filename.substr(filename.rfind('.'));
+  std::string extension = filename.substr(filename.rfind('.') + 1);
   boost::to_lower(extension);
   if (extension.compare("ini") == 0) {
     file_read_successfully_ = ReadIniFile();
@@ -36,7 +36,7 @@ bool ConfigFile::ReadIniFile() {
   return true;
 }
 
-void ConfigFile::DoFileErrorHandling(std::string message, unsigned long int line) {
+void ConfigFile::DoFileErrorHandling(std::string message, unsigned long int line) const {
   std::stringstream log_message;
   switch (file_error_handling_) {
   case IGNORE:
@@ -49,6 +49,15 @@ void ConfigFile::DoFileErrorHandling(std::string message, unsigned long int line
       << "): "
       << message;
     g_log(log_message.str(), log::kWarning);
+    return;
+  case WARN_COUT:
+    log_message << "Error reading ini configuration file. Default config values will be used. File ("
+      << filename_
+      << " at line "
+      << line
+      << "): "
+      << message;
+    std::cout << log_message.str() << std::endl;
     return;
   case SHUT_DOWN:
     log_message << "Error reading ini configuration file. This is a critical error, shutting down the engine. File ("
@@ -65,17 +74,28 @@ void ConfigFile::DoFileErrorHandling(std::string message, unsigned long int line
   }
 }
 
-void ConfigFile::DoPropertyErrorHandling(std::string message) {
+void ConfigFile::DoPropertyErrorHandling(std::string message, std::string property) const {
   std::stringstream log_message;
   switch (property_error_handling_) {
   case IGNORE:
     return;
   case WARN:
-    log_message << "Error reading configuration file property. Default config value will be used. File ("
+    log_message << "Error reading configuration file property <"
+      << property
+      << ">. Default config value will be used. File ("
       << filename_
       << "):  "
       << message;
     g_log(log_message.str(), log::kWarning);
+    return;
+  case WARN_COUT:
+    log_message << "Error reading configuration file property <"
+      << property
+      << ">. Default config value will be used. File ("
+      << filename_
+      << "):  "
+      << message;
+    std::cout << log_message.str() << std::endl;
     return;
   case SHUT_DOWN:
     log_message << "Error reading configuration file property. This is a critical error, shutting down the engine. File ("

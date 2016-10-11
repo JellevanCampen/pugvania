@@ -36,22 +36,34 @@ void Logging::InitializeLogOutputs() {
 }
 
 void Logging::InitializeLogChannels() {
-  // TODO(Jelle): Read the log channel configuration from file
-  LogChannel ch_default("Default", "DFLT", false);
-  ch_default.RegisterLogOutput(&log_output_terminal_);
-  log_channels_.push_back(ch_default);
-  LogChannel ch_warning("Warning", "WARN", true);
-  ch_warning.RegisterLogOutput(&log_output_terminal_);
-  log_channels_.push_back(ch_warning);
-  LogChannel ch_error("Error", "ERRO", true);
-  ch_error.RegisterLogOutput(&log_output_terminal_);
-  log_channels_.push_back(ch_error);
-  LogChannel ch_engine("Engine", "ENGI", false);
-  ch_engine.RegisterLogOutput(&log_output_terminal_);
-  log_channels_.push_back(ch_engine);
-  LogChannel ch_game("Game", "GAME", false);
-  ch_game.RegisterLogOutput(&log_output_terminal_);
-  log_channels_.push_back(ch_game);
+  ConfigFile logging_config((*g_engine->path)["config"] + "logging_config.ini", ConfigFile::WARN_COUT, ConfigFile::WARN_COUT);
+  InitializeLogChannel("default", logging_config);
+  InitializeLogChannel("warning", logging_config);
+  InitializeLogChannel("error", logging_config);
+  InitializeLogChannel("engine", logging_config);
+  InitializeLogChannel("game", logging_config);
+}
+
+void Logging::InitializeLogChannel(std::string channel, const ConfigFile & config_logging) {
+  std::string name;
+  std::string tag;
+  bool timestamp;
+  bool out_terminal;
+  bool out_file;
+  bool out_globalfile;
+
+  config_logging.ReadProperty<std::string>(channel + ".name", &name, channel);
+  config_logging.ReadProperty<std::string>(channel + ".tag", &tag, channel.substr(0, 4));
+  config_logging.ReadProperty<bool>(channel + ".timestamp", &timestamp, false);
+  config_logging.ReadProperty<bool>(channel + ".out_terminal", &out_terminal, true);
+  config_logging.ReadProperty<bool>(channel + ".out_file", &out_file, true);
+  config_logging.ReadProperty<bool>(channel + ".out_globalfile", &out_globalfile, true);
+
+  LogChannel log_channel(name, tag, timestamp);
+  if (out_terminal)
+    log_channel.RegisterLogOutput(&log_output_terminal_);
+  // TODO(Jelle): register other log outputs here once thez have beenm implemented
+  log_channels_.push_back(log_channel);
 }
 
 void Logging::TerminateLogOutputs() {

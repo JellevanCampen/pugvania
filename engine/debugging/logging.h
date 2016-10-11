@@ -5,6 +5,7 @@
 #include <string>
 #include <list>
 #include "engine_subsystem.h"
+#include "utility\config_file.h"
 #include "log_channel.h"
 #include "log_output_terminal.h"
 
@@ -36,6 +37,7 @@ class Logging : public EngineSubsystem{
  private:
    void InitializeLogOutputs();
    void InitializeLogChannels();
+   void InitializeLogChannel(std::string channel, const ConfigFile& config_logging);
    void TerminateLogOutputs();
 
    LogOutputTerminal log_output_terminal_;

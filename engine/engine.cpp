@@ -69,10 +69,6 @@ void Engine::Initialize() {
   for (EngineSubsystem* subsystem : subsystems_)
     subsystem->Initialize();
 
-  // Set the shorthand access pointers for all subsystems.
-  path = subsystem_path_;
-  logging = subsystem_logging_;
-
   // Load the engine configuration from engine_config.ini
   LoadEngineConfig();
 
@@ -145,8 +141,10 @@ Engine::Engine() {
   // Logger is loaded in second to make sure all other subsystems can log 
   // initialization errors. 
   subsystem_path_ = new Path();
+  path = subsystem_path_;
   subsystems_.push_back(subsystem_path_);
   subsystem_logging_ = new Logging();
+  logging = subsystem_logging_;
   subsystems_.push_back(subsystem_logging_);
 
   // TODO(Jelle): remove this once a configurable subsystem is added. This is 
