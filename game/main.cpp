@@ -14,9 +14,10 @@ int main()
     << GAME_VERSION_TWEAK
     << std::endl;
 
-  Engine* e = Engine::get();
+  Engine::Create();
   g_log("Starting the game.", log::kGame);
-  e->Start();
+  g_engine->Start();
+  Engine::Destroy();
 
   return 0;
 }

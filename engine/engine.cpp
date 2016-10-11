@@ -10,38 +10,64 @@
 
 namespace engine {
 
-// Global reference to the Engine to make it more easily available. Note that 
-// this ease of access comes at the cost of safety. Accessing this global 
-// pointer before the Engine is created will return a nullpointer. 
 Engine* g_engine{ NULL };
 
 void g_log(std::string message, LogID channels) {
   g_engine->logging->Log(message, channels);
 }
 
-Engine* Engine::get() {
-  // Construct the engine and all subsystems. 
-  static Engine instance;
-  g_engine = &instance;
+void Engine::Create() {
+  // Create the engine and all its subsystems in forward order.
+  g_engine = new Engine();
+  g_engine->CreateSubsystems();
 
-  // Initialize the engine and all subsystems automatically.
-  instance.Initialize();
-
-  return g_engine;
+  // Initialize the engine and all subsystems in forward order.
+  g_engine->Initialize();
 }
 
-Engine::~Engine() {
-  // Terminate the engine and all subsystems automatically on destruction.
-  Terminate();
+void Engine::Destroy() {
+  // Terminate all subsystems and the engine in reverse order. 
+  g_engine->Terminate();
 
-  // This is where all subsystems are freed. 
-  for (EngineSubsystem* subsystem : subsystems_)
-    delete subsystem;
+  // Destroy all subsystems and the engine in reverse order.
+  g_engine->DestroySubsystems();
+  delete g_engine;
+  g_engine = NULL;
+}
+
+void Engine::Start() {
+  update_rate_sample_time_ = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
+  draw_rate_sample_time_ = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
+
+  is_running_ = true;
+  RunGameLoop();
+}
+
+void Engine::Stop() {
+  is_running_ = false;
+}
+
+void Engine::CreateSubsystems() {
+  // Creation in forward order.
+  path = new Path();
+  subsystems_.push_back(path);
+  logging = new Logging();
+  subsystems_.push_back(logging);
+}
+
+void Engine::DestroySubsystems() {
+  // Destruction in reverse order.
+  delete logging;
+  logging = NULL;
+  delete path;
+  path = NULL;
+
+  subsystems_.clear();
 }
 
 void Engine::Initialize() {
-  // Note that standard console output is used here as the logging subsystem 
-  // is not initialized yet. 
+  // Note: console output is used here as the logging subsystem is not 
+  // initialized yet. 
   std::cout << "Initializing Engine." << std::endl;
   std::cout << "Version: "
     << ENGINE_VERSION_MAJOR << "."
@@ -63,36 +89,30 @@ void Engine::Initialize() {
     std::cout << "Target platform: Unknown" << std::endl;
 #endif
 
-  // Initialize all engine subsystems in forward order. Note that this 
-  // initialization order is important to avoid dependency issues between 
-  // subsystems. 
+  // Initialize all subsystems in forward order. 
   for (EngineSubsystem* subsystem : subsystems_)
     subsystem->Initialize();
 
   // Load the engine configuration from engine_config.ini
-  LoadEngineConfig();
+  LoadEngineConfiguration();
 
+  // Log a message on initialization.
   const void* engine_adress = static_cast<const void*>(this);
   std::stringstream init_message;
-  init_message << "Engine initialized at 0x" << engine_adress;
+  init_message << "Engine initialized at 0x" << engine_adress << ".";
   g_log(init_message.str(), log::kEngine);
 }
 
-void Engine::Start() {
-  // Initialize the update and draw rate sampling times so that both rates can  
-  // be measured from this point on. 
-  update_rate_sample_time_ = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
-  draw_rate_sample_time_ = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
+void Engine::Terminate() {
+  // Log a message on termination.
+  g_log("Engine terminating.", log::kEngine);
 
-  is_running_ = true;
-  RunGameLoop();
+  // Terminate all subsystems in reverse order.
+  for (EngineSubsystem* subsystem : reverse(subsystems_))
+    subsystem->Terminate();
 }
 
-void Engine::Stop() {
-  is_running_ = false;
-}
-
-void Engine::LoadEngineConfig()
+void Engine::LoadEngineConfiguration()
 {
   boost::property_tree::ptree pt;
   try {
@@ -116,83 +136,6 @@ void Engine::LoadEngineConfig()
       << err.message();
     g_log(warning_message.str(), log::kWarning);
   }
-}
-
-void Engine::Terminate() {
-  std::cout << "Terminating Engine." << std::endl;
-
-  // Reset the shorthand access pointers for all subsystems to nullpointers.
-  logging = NULL;
-  path = NULL;
-
-  // Terminate all engine subsystems in reverse order. Note that this 
-  // termination order is important to avoid dependency issues between 
-  // subsystems. 
-  for (EngineSubsystem* subsystem : reverse(subsystems_))
-    subsystem->Terminate();
-}
-
-Engine::Engine() {
-  // Load the Path subsystem first. Note: the Path subsystem and the Logging 
-  // subsystem are special cases of subsystems as many other subsystems make 
-  // use of them. Therefore they are loaded as fast as possible before other 
-  // subsystems. In this case the loading of Path needs to be hardcoded, as 
-  // the path subsystem itself is used to retrieve the engine configuration. 
-  // Logger is loaded in second to make sure all other subsystems can log 
-  // initialization errors. 
-  subsystem_path_ = new Path();
-  path = subsystem_path_;
-  subsystems_.push_back(subsystem_path_);
-  subsystem_logging_ = new Logging();
-  logging = subsystem_logging_;
-  subsystems_.push_back(subsystem_logging_);
-
-  // TODO(Jelle): remove this once a configurable subsystem is added. This is 
-  // example code. 
-  //// Load the engine subsystem configuration
-  //boost::property_tree::ptree pt;
-  //std::string subsystem_subsystemname_implementation;
-  //try {
-  //  boost::property_tree::ini_parser::read_ini((*path)["config"] + "engine_config.ini", pt);
-  //  subsystem_subsystemname_implementation = pt.get<std::string>("subsystems.subsystemname", "default_implementation");
-  //}
-  //catch (boost::property_tree::ini_parser_error err) {
-  //  std::stringstream warning_message;
-  //  warning_message << "Error reading engine subsystem configuration, using default values. File ("
-  //    << err.filename()
-  //    << " at line "
-  //    << err.line()
-  //    << "): "
-  //    << err.message();
-  //  // Printing the warning directly to the console as the Logging subsystem is 
-  //  // not initialized yet. 
-  //  std::cout << warning_message.str() << std::endl;
-  //}
-
-  //// Create all subsystems in forward order. Don't initialize them yet.
-  //subsystem_subsystemname_ = CreateSubsystem_Subsystemname(subsystem_subsystemname_implementation);
-  //subsystems_.push_back(subsystem_subsystemname);
-}
-
-// TODO(Jelle): remove this once a configurable subsystem is added. This is 
-// example code. 
-//SubsystemName* CreateSubsystem_SubsystemName(std::string implementation) {
-//  if (implementation.compare("default") == 0)
-//    return new Logging();
-//  ShowSubsystemError("logging", implementation);
-//}
-
-void Engine::ShowSubsystemError(std::string subsystem_name, std::string implementation) {
-  // Printing the error directly to the console as the Logging subsystem is 
-  // not initialized yet. 
-  std::cout << "Error loading " << subsystem_name << " subsystem. '"
-    << implementation << "' does not match a known " 
-    << subsystem_name << " subsystem implementation."
-    << std::endl
-    << "Press any key to shut down the engine."
-    << std::endl;
-  std::cin.get();
-  exit(1);
 }
 
 void Engine::RunGameLoop() {
@@ -237,7 +180,6 @@ void Engine::RunGameLoop() {
         SampleDrawRate();
       }
     }
-    
   }
 }
 
