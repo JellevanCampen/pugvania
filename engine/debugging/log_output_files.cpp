@@ -17,7 +17,7 @@ void LogOutputFiles::Terminate() {
 void LogOutputFiles::Log(const LogChannel& log_channel, std::string message) {
   std::fstream* log_file{ NULL };
 
-  // Lazy instantiation of the file streams
+  // Lazy instantiation of the file streams.
   if (log_files_.count(log_channel.tag_) == 0) {
     log_file = new std::fstream;
     log_file->open((*g_engine->path)["logging"] + log_channel.name_ + ".log", std::ios::out | std::ios::app);
