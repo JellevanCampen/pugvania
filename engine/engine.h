@@ -6,9 +6,10 @@
 #include <list>
 #include <iostream>
 #include "common/game_time.h"
-#include "common/utility/path.h"
 #include "engine_subsystem.h"
+#include "common/utility/path.h"
 #include "debugging/logging.h"
+#include "timing/timing.h"
 
 namespace engine {
 
@@ -35,13 +36,12 @@ class Engine {
   void Stop();
 
   const GameTime& GetGameTime() const { return game_time_; }
-  float GetUpdateRate() const { return update_rate_; }
-  float GetDrawRate() const { return draw_rate_; }
 
   // Pointers that give access to all engine subsystems. Safe to use after 
   // Create() was called and before Destroy() was called. 
   Path* path{ NULL };
   Logging* logging{ NULL };
+  Timing* timing{ NULL };
 
  private:
   typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
@@ -62,17 +62,10 @@ class Engine {
   void Update(unsigned int delta_time_micros);
   void Draw(float frame_interpolation);
 
-  void SampleUpdateRate();
-  void SampleDrawRate();
-
   std::list<EngineSubsystem*> subsystems_;
 
   bool is_running_{ false };
   GameTime game_time_{ };
-  TimePointMicros update_rate_sample_time_;
-  TimePointMicros draw_rate_sample_time_;
-  float update_rate_{ 0.0f };
-  float draw_rate_{ 0.0f };
 
   // Whether or not output should be drawn on screen. Can be disabled to speed 
   // up simulations by only performing updates. 

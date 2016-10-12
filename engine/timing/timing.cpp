@@ -1,13 +1,18 @@
 #include "timing/timing.h"
+#include "engine.h"
+#include <sstream>
 
 namespace engine {
 
 void Timing::Initialize() {
-
+  const void* adress = static_cast<const void*>(this);
+  std::stringstream init_message;
+  init_message << "Timing subsystem initialized at 0x" << adress;
+  g_log(init_message.str(), log::kEngine);
 }
 
 void Timing::Terminate() {
-
+  g_log("Timing subsystem terminating.", log::kEngine);
 }
 
 void Timing::Update() {

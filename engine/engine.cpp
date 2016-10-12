@@ -36,9 +36,6 @@ void Engine::Destroy() {
 }
 
 void Engine::Start() {
-  update_rate_sample_time_ = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
-  draw_rate_sample_time_ = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
-
   is_running_ = true;
   RunGameLoop();
 }
@@ -53,10 +50,14 @@ void Engine::CreateSubsystems() {
   subsystems_.push_back(path);
   logging = new Logging();
   subsystems_.push_back(logging);
+  timing = new Timing();
+  subsystems_.push_back(timing);
 }
 
 void Engine::DestroySubsystems() {
   // Destruction in reverse order.
+  delete timing;
+  timing = NULL;
   delete logging;
   logging = NULL;
   delete path;
@@ -114,28 +115,15 @@ void Engine::Terminate() {
 
 void Engine::LoadEngineConfiguration()
 {
-  boost::property_tree::ptree pt;
-  try {
-    boost::property_tree::ini_parser::read_ini((*path)["config"] + "engine_config.ini", pt);
-    drawing_is_enabled_ = pt.get<bool>("engine.drawing_is_enabled", true);
-    update_time_step_is_fixed_ = pt.get<bool>("engine.update_time_step_is_fixed", true);
-    time_step_micros_ = pt.get<unsigned int>("engine.time_step_micros", 1000000 / 60);
-    draw_rate_is_capped_ = pt.get<bool>("engine.draw_rate_is_capped", false);
-    max_frame_skip_ = pt.get<unsigned short int>("engine.max_frame_skip", 5);
-    update_rate_sample_ = pt.get<unsigned short int>("engine.update_rate_sample", 10);
-    draw_rate_sample_ = pt.get<unsigned short int>("engine.draw_rate_sample", 10);
-    rate_rolling_average_window_ = pt.get<unsigned short int>("engine.rate_rolling_average_window", 4);
-  }
-  catch (boost::property_tree::ini_parser_error err) {
-    std::stringstream warning_message;
-    warning_message << "Error reading engine game loop configuration, using default values. File ("
-      << err.filename()
-      << " at line "
-      << err.line()
-      << "): "
-      << err.message();
-    g_log(warning_message.str(), log::kWarning);
-  }
+  ConfigFile engine_config((*g_engine->path)["config"] + "engine_config.ini", ConfigFile::WARN_COUT, ConfigFile::WARN_COUT);
+  engine_config.ReadProperty<bool>("engine.drawing_is_enabled", &drawing_is_enabled_, true);
+  engine_config.ReadProperty<bool>("engine.update_time_step_is_fixed", &update_time_step_is_fixed_, true);
+  engine_config.ReadProperty<unsigned int>("engine.time_step_micros", &time_step_micros_, 1000000 / 60);
+  engine_config.ReadProperty<bool>("engine.draw_rate_is_capped", &draw_rate_is_capped_, false);
+  engine_config.ReadProperty<unsigned short int>("engine.max_frame_skip", &max_frame_skip_, 5);
+  engine_config.ReadProperty<unsigned short int>("engine.update_rate_sample", &update_rate_sample_, 10);
+  engine_config.ReadProperty<unsigned short int>("engine.draw_rate_sample", &draw_rate_sample_, 10);
+  engine_config.ReadProperty<unsigned short int>("engine.rate_rolling_average_window", &rate_rolling_average_window_, 4);
 }
 
 void Engine::RunGameLoop() {
@@ -161,23 +149,19 @@ void Engine::RunGameLoop() {
         lag -= time_step_micros;
         frame_skip_counter++;
         update_drawn = false;
-        SampleUpdateRate();
       }
 
       if (drawing_is_enabled_ && (!draw_rate_is_capped_ || !update_drawn)) {
         Draw(std::min(1.0f, ((float)lag.count()) / ((float)time_step_micros_)));
         update_drawn = true;
-        SampleDrawRate();
       }
     } else {
       // Variable time step loop. The principle: perform updates succeeded by 
       // draws as fast as possible. Setting: "drawing enabled vs disabled",  
       // can cause a slight deviation from this behavior. 
       Update(time_since_last_update.count());
-      SampleUpdateRate();
       if (drawing_is_enabled_) {
         Draw(0.0f);
-        SampleDrawRate();
       }
     }
   }
@@ -195,6 +179,12 @@ void Engine::Update(unsigned int delta_time_micros) {
   // engine after 5 seconds for debugging purposes.
   if (game_time_.GetTotalTimeMicros() >= 5000000)
     Stop();
+  // TODO(Jelle): Remove this when the Timing is fully functional. This is 
+  // temporary display rate measurement info. 
+  if (timing->GetUpdateCount() % 60 == 0) {
+    g_log("Updates per second: " + std::to_string(timing->GetUpdateRate()));
+    g_log("Frames per second: " + std::to_string(timing->GetDrawRate()));
+  }
 }
 
 void Engine::Draw(float frame_interpolation) {
@@ -204,26 +194,6 @@ void Engine::Draw(float frame_interpolation) {
   // Draw all engine subsystems in forward order.
   for (EngineSubsystem* subsystem : subsystems_)
     subsystem->Draw();
-}
-
-void Engine::SampleUpdateRate() {
-  if (game_time_.update_count_ % update_rate_sample_ == 0) {
-    TimePointMicros now = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
-    DurationMicros elapsed = (now - update_rate_sample_time_);
-    update_rate_sample_time_ = now;
-    float update_rate_current = update_rate_sample_ * 1000000.0f / ((float)elapsed.count());
-    update_rate_ = (update_rate_ * (rate_rolling_average_window_ - 1) + (update_rate_current)) / rate_rolling_average_window_;
-  }
-}
-
-void Engine::SampleDrawRate() {
-  if (game_time_.draw_count_ % draw_rate_sample_ == 0) {
-    TimePointMicros now = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
-    DurationMicros elapsed = (now - draw_rate_sample_time_);
-    draw_rate_sample_time_ = now;
-    float draw_rate_current = draw_rate_sample_ * 1000000.0f / ((float)elapsed.count());
-    draw_rate_ = (draw_rate_ * (rate_rolling_average_window_ - 1) + (draw_rate_current)) / rate_rolling_average_window_;
-  }
 }
 
 } // namespace
