@@ -43,6 +43,13 @@ struct colorRGBinteger {
   inline colorRGBinteger operator/ (float scalar) const { return colorRGBinteger(unsigned int(0.5f + r_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + r_ / scalar), unsigned int(0.5f + g_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + g_ / scalar), unsigned int(0.5f + b_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + b_ / scalar)); }
   friend std::ostream& operator<<(std::ostream &os, colorRGBinteger const &c) { return os << "(" << unsigned int(c.r_) << ", " << unsigned int(c.g_) << ", " << unsigned int(c.b_) << ")"; }
 
+  float distance(const colorRGBinteger& other) const { 
+    float dr = float(r_) - float(other.r_); 
+    float dg = float(g_) - float(other.g_); 
+    float db = float(b_) - float(other.b_);
+    return std::sqrtf(dr * dr + dg * dg + db * db);
+  }
+
   valuetype r_{ valuetype(0) }, g_{ valuetype(0) }, b_{ valuetype(0) };
 };
 typedef colorRGBinteger<unsigned char> cRGBi;
@@ -88,6 +95,14 @@ struct colorRGBAinteger {
   inline colorRGBAinteger operator/ (float scalar) const { return colorRGBAinteger(unsigned int(0.5f + r_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + r_ / scalar), unsigned int(0.5f + g_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + g_ / scalar), unsigned int(0.5f + b_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + b_ / scalar), unsigned int(0.5f + a_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + a_ / scalar)); }
   friend std::ostream& operator<<(std::ostream &os, colorRGBAinteger const &c) { return os << "(" << unsigned int(c.r_) << ", " << unsigned int(c.g_) << ", " << unsigned int(c.b_) << ", " << unsigned int(c.a_) << ")"; }
 
+  float distance(const colorRGBAinteger& other) const {
+    float dr = float(r_) - float(other.r_);
+    float dg = float(g_) - float(other.g_);
+    float db = float(b_) - float(other.b_);
+    float da = float(a_) - float(other.a_);
+    return std::sqrtf(dr * dr + dg * dg + db * db + da * da);
+  }
+
   valuetype r_{ valuetype(0) }, g_{ valuetype(0) }, b_{ valuetype(0) }, a_{ valuetype(255) };
 };
 typedef colorRGBAinteger<unsigned char> cRGBAi;
@@ -130,6 +145,13 @@ public:
   inline colorRGBfloat operator* (valuetype scalar) const { return colorRGBfloat(std::min(r_ * scalar, valuetype(1.0)), std::min(g_ * scalar, valuetype(1.0)), std::min(b_ * scalar, valuetype(1.0))); }
   inline colorRGBfloat operator/ (valuetype scalar) const { return colorRGBfloat(std::min(r_ / scalar, valuetype(1.0)), std::min(g_ / scalar, valuetype(1.0)), std::min(b_ / scalar, valuetype(1.0))); }
   friend std::ostream& operator<<(std::ostream &os, colorRGBfloat const &c) { return os << "(" << c.r_ << ", " << c.g_ << ", " << c.b_ << ")"; }
+
+  float distance(const colorRGBinteger& other) const {
+    float dr = float(r_) - float(other.r_);
+    float dg = float(g_) - float(other.g_);
+    float db = float(b_) - float(other.b_);
+    return std::sqrtf(dr * dr + dg * dg + db * db);
+  }
 
   valuetype r_{ valuetype(0.0) }, g_{ valuetype(0.0) }, b_{ valuetype(0.0) };
 };
@@ -180,6 +202,14 @@ public:
   inline colorRGBAfloat operator* (valuetype scalar) const { return colorRGBAfloat(std::min(r_ * scalar, valuetype(1.0)), std::min(g_ * scalar, valuetype(1.0)), std::min(b_ * scalar, valuetype(1.0)), std::min(a_ * scalar, valuetype(1.0))); }
   inline colorRGBAfloat operator/ (valuetype scalar) const { return colorRGBAfloat(std::min(r_ / scalar, valuetype(1.0)), std::min(g_ / scalar, valuetype(1.0)), std::min(b_ / scalar, valuetype(1.0)), std::min(a_ / scalar, valuetype(1.0))); }
   friend std::ostream& operator<<(std::ostream &os, colorRGBAfloat const &c) { return os << "(" << c.r_ << ", " << c.g_ << ", " << c.b_ << ", " << c.a_ << ")"; }
+
+  float distance(const colorRGBAinteger& other) const {
+    float dr = float(r_) - float(other.r_);
+    float dg = float(g_) - float(other.g_);
+    float db = float(b_) - float(other.b_);
+    float da = float(a_) - float(other.a_);
+    return std::sqrtf(dr * dr + dg * dg + db * db + da * da);
+  }
 
   valuetype r_{ valuetype(0.0) }, g_{ valuetype(0.0) }, b_{ valuetype(0.0) }, a_{ valuetype(1.0) };
 };
