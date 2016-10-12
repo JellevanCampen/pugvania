@@ -17,22 +17,6 @@ set (SRC_ENGINE
 	)
 source_group (engine FILES ${SRC_ENGINE})
 
-# [ engine/debugging ]
-set (SRC_ENGINE_DEBUGGING
-	"debugging/logging.h"
-	"debugging/logging.cpp"
-	"debugging/log_channel.h"
-	"debugging/log_channel.cpp"
-	"debugging/log_output.h"
-	"debugging/log_output_terminal.h"
-	"debugging/log_output_terminal.cpp"
-	"debugging/log_output_files.h"
-	"debugging/log_output_files.cpp"
-	"debugging/log_output_globalfile.h"
-	"debugging/log_output_globalfile.cpp"
-	)
-source_group (engine\\debugging FILES ${SRC_ENGINE_DEBUGGING})
-
 # [ engine/common ]
 set (SRC_ENGINE_COMMON 
 	"common/game_time.h"
@@ -62,14 +46,38 @@ set (SRC_ENGINE_COMMON_UTILITY
 	)
 source_group (engine\\common\\utility FILES ${SRC_ENGINE_COMMON_UTILITY})
 
+# [ engine/debugging ]
+set (SRC_ENGINE_DEBUGGING
+	"debugging/logging.h"
+	"debugging/logging.cpp"
+	"debugging/log_channel.h"
+	"debugging/log_channel.cpp"
+	"debugging/log_output.h"
+	"debugging/log_output_terminal.h"
+	"debugging/log_output_terminal.cpp"
+	"debugging/log_output_files.h"
+	"debugging/log_output_files.cpp"
+	"debugging/log_output_globalfile.h"
+	"debugging/log_output_globalfile.cpp"
+	)
+source_group (engine\\debugging FILES ${SRC_ENGINE_DEBUGGING})
+
+# [ engine/timing ]
+set (SRC_ENGINE_TIMING
+	"timing/timing.h"
+	"timing/timing.cpp"
+	)
+source_group (engine\\timing FILES ${SRC_ENGINE_TIMING})
+
 # [ <ALL> ]
 set (SRC_ALL
 	${SRC_ENGINE}
-	${SRC_ENGINE_DEBUGGING}
 	${SRC_ENGINE_COMMON}
 	${SRC_ENGINE_COMMON_DATATYPES}
 	${SRC_ENGINE_COMMON_PATTERNS}
 	${SRC_ENGINE_COMMON_UTILITY}
+	${SRC_ENGINE_DEBUGGING}
+	${SRC_ENGINE_TIMING}
 	)
 
 # Make Engine static library project
