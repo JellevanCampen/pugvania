@@ -49,6 +49,7 @@ source_group (engine\\common\\datatypes FILES ${SRC_ENGINE_COMMON_DATATYPES})
 # [ engine/common/patterns ]
 set (SRC_ENGINE_COMMON_PATTERNS 
 	"common/patterns/reverse_iterator.h"
+	"common/patterns/enum_class_iterator.h"
 	)
 source_group (engine\\common\\patterns FILES ${SRC_ENGINE_COMMON_PATTERNS})
 
