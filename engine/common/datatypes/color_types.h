@@ -3,6 +3,7 @@
 #define ENGINE_COMMON_DATATYPES_COLORTYPES_H_
 
 #include <algorithm>
+#include <iostream>
 
 namespace engine {
 
@@ -15,23 +16,16 @@ struct colorRGBinteger {
   colorRGBinteger(valuetype v) : r_(v), g_(v), b_(v) { }
   colorRGBinteger(valuetype r, valuetype g, valuetype b) : r_(r), g_(g), b_(b) { }
 
-  // Casts
-  inline operator colorRGBAi() const { return colorRGBAi(r_, g_, b_, valuetype(255)); }
-
   // Operators
-  inline colorRGBinteger operator+ (const colorRGBinteger& other) const { return colorRGBinteger(std::min(r_ + other.r_, valuetype(255)), std::min(g_ + other.g_, valuetype(255)), std::min(b_ + other.b_, valuetype(255))); }
+  inline colorRGBinteger operator+ (const colorRGBinteger& other) const { return colorRGBinteger(unsigned int(r_) + unsigned int(other.r_) > 255u ? valuetype(255) : valuetype(r_ + other.r_), unsigned int(g_) + unsigned int(other.g_) > 255u ? valuetype(255) : valuetype(g_ + other.g_), unsigned int(b_) + unsigned int(other.b_) > 255u ? valuetype(255) : valuetype(b_ + other.b_)); }
   inline colorRGBinteger operator- (const colorRGBinteger& other) const { return colorRGBinteger(r_>other.r_ ? r_ - other.r_ : valuetype(0), g_>other.g_ ? g_ - other.g_ : valuetype(0), b_>other.b_ ? b_ - other.b_ : valuetype(0)); }
-  inline colorRGBinteger operator* (valuetype scalar) const { return colorRGBinteger(std::min(r_ * scalar, valuetype(255)), std::min(g_ * scalar, valuetype(255)), std::min(b_ * scalar, valuetype(255))); }
-  inline colorRGBinteger operator* (float scalar) const { return colorRGBinteger(std::min(int(r_ * scalar), valuetype(255)), std::min(int(g_ * scalar), valuetype(255)), std::min(int(b_ * scalar), valuetype(255))); }
-  inline colorRGBinteger operator/ (valuetype scalar) const { return colorRGBinteger(std::min(r_ / scalar, valuetype(255)), std::min(g_ / scalar, valuetype(255)), std::min(b_ / scalar, valuetype(255))); }
-  inline colorRGBinteger operator/ (float scalar) const { return colorRGBinteger(std::min(int(r_ / scalar), valuetype(255)), std::min(int(g_ / scalar), valuetype(255)), std::min(int(b_ / scalar), valuetype(255))); }
+  inline colorRGBinteger operator* (float scalar) const { return colorRGBinteger(unsigned int(0.5f + r_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + r_ * scalar), unsigned int(0.5f + g_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + g_ * scalar), unsigned int(0.5f + b_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + b_ * scalar)); }
+  inline colorRGBinteger operator/ (float scalar) const { return colorRGBinteger(unsigned int(0.5f + r_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + r_ / scalar), unsigned int(0.5f + g_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + g_ / scalar), unsigned int(0.5f + b_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + b_ / scalar)); }
+  friend std::ostream& operator<<(std::ostream &os, colorRGBinteger const &c) { return os << "(" << unsigned int(c.r_) << ", " << unsigned int(c.g_) << ", " << unsigned int(c.b_) << ")"; }
 
   valuetype r_{ valuetype(0) }, g_{ valuetype(0) }, b_{ valuetype(0) };
 };
-// TODO(Jelle): test whether there are no over- or underflow problems. If so only the unsigned char version should be needed
-typedef colorRGBinteger<unsigned int> cRGBi;
-typedef colorRGBinteger<unsigned short> cRGBs;
-typedef colorRGBinteger<unsigned char> cRGBc;
+typedef colorRGBinteger<unsigned char> cRGBi;
 
 // Represents a Red, Green, Blue, Alpha (RGBA) color, with components stored 
 // as integer values. 
@@ -41,27 +35,77 @@ struct colorRGBAinteger {
   // Constructors
   colorRGBAinteger(valuetype v) : r_(v), g_(v), b_(v) { }
   colorRGBAinteger(valuetype r, valuetype g, valuetype b, valuetype a = valuetype(255)) : r_(r), g_(g), b_(b), a_(a) { }
+  template <typename cast_valuetype> colorRGBAinteger(const colorRGBinteger<cast_valuetype>& c) : r_(valuetype(c.r_)), g_(valuetype(c.g_)), b_(valuetype(c.b_)) { }
    
   // Casts
-  inline operator colorRGBAinteger() const { return colorRGBAinteger(r_, g_, b_); }
+  template<typename cast_valuetype> inline operator colorRGBinteger<cast_valuetype>() const { return colorRGBinteger<cast_valuetype>(cast_valuetype(r_), cast_valuetype(g_), cast_valuetype(b_)); }
 
   // Operators
-  inline colorRGBAinteger operator+ (const colorRGBAinteger& other) const { return colorRGBAinteger(std::min(r_ + other.r_, valuetype(255)), std::min(g_ + other.g_, valuetype(255)), std::min(b_ + other.b_, valuetype(255)), a_); }
+  inline colorRGBAinteger operator+ (const colorRGBAinteger& other) const { return colorRGBAinteger(unsigned int(r_) + unsigned int(other.r_) > 255u ? valuetype(255) : valuetype(r_ + other.r_), unsigned int(g_) + unsigned int(other.g_) > 255u ? valuetype(255) : valuetype(g_ + other.g_), unsigned int(b_) + unsigned int(other.b_) > 255u ? valuetype(255) : valuetype(b_ + other.b_), unsigned int(a_) + unsigned int(other.a_) > 255u ? valuetype(255) : valuetype(a_ + other.a_)); }
   inline colorRGBAinteger operator- (const colorRGBAinteger& other) const { return colorRGBAinteger(r_>other.r_ ? r_-other.r_ : valuetype(0), g_>other.g_ ? g_ - other.g_ : valuetype(0), b_>other.b_ ? b_ - other.b_ : valuetype(0), a_); }
-  inline colorRGBAinteger operator* (valuetype scalar) const { return colorRGBAinteger(std::min(r_ * scalar, valuetype(255)), std::min(g_ * scalar, valuetype(255)), std::min(b_ * scalar, valuetype(255)), a_); }
-  inline colorRGBAinteger operator* (float scalar) const { return colorRGBAinteger(std::min(int(r_ * scalar), valuetype(255)), std::min(int(g_ * scalar), valuetype(255)), std::min(int(b_ * scalar), valuetype(255)), a_); }
-  inline colorRGBAinteger operator/ (valuetype scalar) const { return colorRGBAinteger(std::min(r_ / scalar, valuetype(255)), std::min(g_ / scalar, valuetype(255)), std::min(b_ / scalar, valuetype(255)), a_); }
-  inline colorRGBAinteger operator/ (float scalar) const { return colorRGBAinteger(std::min(int(r_ / scalar), valuetype(255)), std::min(int(g_ / scalar), valuetype(255)), std::min(int(b_ / scalar), valuetype(255)), a_); }
+  inline colorRGBAinteger operator* (float scalar) const { return colorRGBAinteger(unsigned int(0.5f + r_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + r_ * scalar), unsigned int(0.5f + g_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + g_ * scalar), unsigned int(0.5f + b_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + b_ * scalar), unsigned int(0.5f + a_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + a_ * scalar)); }
+  inline colorRGBAinteger operator/ (float scalar) const { return colorRGBAinteger(unsigned int(0.5f + r_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + r_ / scalar), unsigned int(0.5f + g_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + g_ / scalar), unsigned int(0.5f + b_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + b_ / scalar), unsigned int(0.5f + a_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + a_ / scalar)); }
+  friend std::ostream& operator<<(std::ostream &os, colorRGBAinteger const &c) { return os << "(" << unsigned int(c.r_) << ", " << unsigned int(c.g_) << ", " << unsigned int(c.b_) << ", " << unsigned int(c.a_) << ")"; }
 
   valuetype r_{ valuetype(0) }, g_{ valuetype(0) }, b_{ valuetype(0) }, a_{ valuetype(255) };
 };
-// TODO(Jelle): test whether there are no over- or underflow problems. If so only the unsigned char version should be needed
-typedef colorRGBAinteger<unsigned int> cRGBAi;
-typedef colorRGBAinteger<unsigned short> cRGBAs;
-typedef colorRGBAinteger<unsigned char> cRGBAc;
+typedef colorRGBAinteger<unsigned char> cRGBAi;
 
-// TODO(Jelle): implement float versions of these as well as casting operators. 
-// Note that float ranges vary from 0.0f to 1.0f and not 0 to 255
+// Represents a Red, Green, Blue (RGB) color, with components stored as 
+// float values. 
+template <typename valuetype>
+struct colorRGBfloat {
+public:
+  // Constructors
+  colorRGBfloat(valuetype v) : r_(v), g_(v), b_(v) { }
+  colorRGBfloat(valuetype r, valuetype g, valuetype b) : r_(r), g_(g), b_(b) { }
+  template <typename cast_valuetype> colorRGBfloat(const colorRGBinteger<cast_valuetype>& c) : r_(valuetype(c.r_) / valuetype(255.0)), g_(valuetype(c.g_) / valuetype(255.0)), b_(valuetype(c.b_) / valuetype(255.0)) { }
+  template <typename cast_valuetype> colorRGBfloat(const colorRGBAinteger<cast_valuetype>& c) : r_(valuetype(c.r_) / valuetype(255.0)), g_(valuetype(c.g_) / valuetype(255.0)), b_(valuetype(c.b_) / valuetype(255.0)) { }
+
+  // Casts
+  template<typename cast_valuetype> inline operator colorRGBinteger<cast_valuetype>() const { return colorRGBinteger<cast_valuetype>(cast_valuetype(valuetype(0.5) + r_ * valuetype(255.0)) , cast_valuetype(valuetype(0.5) + g_ * valuetype(255.0)), cast_valuetype(valuetype(0.5) + b_ * valuetype(255.0))); }
+  template<typename cast_valuetype> inline operator colorRGBAinteger<cast_valuetype>() const { return colorRGBAinteger<cast_valuetype>(cast_valuetype(valuetype(0.5) + r_ * valuetype(255.0)), cast_valuetype(valuetype(0.5) + g_ * valuetype(255.0)), cast_valuetype(valuetype(0.5) + b_ * valuetype(255.0))); }
+
+  // Operators
+  inline colorRGBfloat operator+ (const colorRGBfloat& other) const { return colorRGBfloat(std::min(r_ + other.r_, valuetype(1.0)), std::min(g_ + other.g_, valuetype(1.0)), std::min(b_ + other.b_, valuetype(1.0))); }
+  inline colorRGBfloat operator- (const colorRGBfloat& other) const { return colorRGBfloat(r_>other.r_ ? r_ - other.r_ : valuetype(0.0), g_>other.g_ ? g_ - other.g_ : valuetype(0.0), b_>other.b_ ? b_ - other.b_ : valuetype(0.0)); }
+  inline colorRGBfloat operator* (valuetype scalar) const { return colorRGBfloat(std::min(r_ * scalar, valuetype(1.0)), std::min(g_ * scalar, valuetype(1.0)), std::min(b_ * scalar, valuetype(1.0))); }
+  inline colorRGBfloat operator/ (valuetype scalar) const { return colorRGBfloat(std::min(r_ / scalar, valuetype(1.0)), std::min(g_ / scalar, valuetype(1.0)), std::min(b_ / scalar, valuetype(1.0))); }
+  friend std::ostream& operator<<(std::ostream &os, colorRGBfloat const &c) { return os << "(" << c.r_ << ", " << c.g_ << ", " << c.b_ << ")"; }
+
+  valuetype r_{ valuetype(0.0) }, g_{ valuetype(0.0) }, b_{ valuetype(0.0) };
+};
+typedef colorRGBfloat<float> cRGBf;
+typedef colorRGBfloat<double> cRGBd;
+
+// Represents a Red, Green, Blue, Alpha (RGBA) color, with components stored 
+// as float values. 
+template <typename valuetype>
+struct colorRGBAfloat {
+public:
+  // Constructors
+  colorRGBAfloat(valuetype v) : r_(v), g_(v), b_(v) { }
+  colorRGBAfloat(valuetype r, valuetype g, valuetype b, valuetype a = valuetype(1.0)) : r_(r), g_(g), b_(b), a_(a) { }
+  template <typename cast_valuetype> colorRGBAfloat(const colorRGBinteger<cast_valuetype>& c) : r_(valuetype(c.r_) / valuetype(255.0)), g_(valuetype(c.g_) / valuetype(255.0)), b_(valuetype(c.b_) / valuetype(255.0)) { }
+  template <typename cast_valuetype> colorRGBAfloat(const colorRGBAinteger<cast_valuetype>& c) : r_(valuetype(c.r_) / valuetype(255.0)), g_(valuetype(c.g_) / valuetype(255.0)), b_(valuetype(c.b_) / valuetype(255.0)), a_(valuetype(c.a_) / valuetype(255.0)) { }
+  template <typename cast_valuetype> colorRGBAfloat(const colorRGBfloat<cast_valuetype>& c) : r_(valuetype(c.r_)), g_(valuetype(c.g_)), b_(valuetype(c.b_)) { }
+
+  // Casts
+  template<typename cast_valuetype> inline operator colorRGBinteger<cast_valuetype>() const { return colorRGBinteger<cast_valuetype>(cast_valuetype(valuetype(0.5) + r_ * valuetype(255.0)), cast_valuetype(valuetype(0.5) + g_ * valuetype(255.0)), cast_valuetype(valuetype(0.5) + b_ * valuetype(255.0))); }
+  template<typename cast_valuetype> inline operator colorRGBAinteger<cast_valuetype>() const { return colorRGBAinteger<cast_valuetype>(cast_valuetype(valuetype(0.5) + r_ * valuetype(255.0)), cast_valuetype(valuetype(0.5) + g_ * valuetype(255.0)), cast_valuetype(valuetype(0.5) + b_ * valuetype(255.0)), cast_valuetype(valuetype(0.5) + a_ * valuetype(255.0))); }
+  template<typename cast_valuetype> inline operator colorRGBfloat<cast_valuetype>() const { return colorRGBfloat<cast_valuetype>(cast_valuetype(r_), cast_valuetype(g_), cast_valuetype(b_)); }
+
+  // Operators
+  inline colorRGBAfloat operator+ (const colorRGBAfloat& other) const { return colorRGBAfloat(std::min(r_ + other.r_, valuetype(1.0)), std::min(g_ + other.g_, valuetype(1.0)), std::min(b_ + other.b_, valuetype(1.0)), std::min(a_ + other.a_, valuetype(1.0))); }
+  inline colorRGBAfloat operator- (const colorRGBAfloat& other) const { return colorRGBAfloat(r_>other.r_ ? r_ - other.r_ : valuetype(0.0), g_>other.g_ ? g_ - other.g_ : valuetype(0.0), b_>other.b_ ? b_ - other.b_ : valuetype(0.0), a_>other.a_ ? a_ - other.a_ : valuetype(0.0)); }
+  inline colorRGBAfloat operator* (valuetype scalar) const { return colorRGBAfloat(std::min(r_ * scalar, valuetype(1.0)), std::min(g_ * scalar, valuetype(1.0)), std::min(b_ * scalar, valuetype(1.0)), std::min(a_ * scalar, valuetype(1.0))); }
+  inline colorRGBAfloat operator/ (valuetype scalar) const { return colorRGBAfloat(std::min(r_ / scalar, valuetype(1.0)), std::min(g_ / scalar, valuetype(1.0)), std::min(b_ / scalar, valuetype(1.0)), std::min(a_ / scalar, valuetype(1.0))); }
+  friend std::ostream& operator<<(std::ostream &os, colorRGBAfloat const &c) { return os << "(" << c.r_ << ", " << c.g_ << ", " << c.b_ << ", " << c.a_ << ")"; }
+
+  valuetype r_{ valuetype(0.0) }, g_{ valuetype(0.0) }, b_{ valuetype(0.0) }, a_{ valuetype(1.0) };
+};
+typedef colorRGBAfloat<float> cRGBAf;
+typedef colorRGBAfloat<double> cRGBAd;
 
 } // namespace
 
