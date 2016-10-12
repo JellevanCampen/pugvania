@@ -16,7 +16,7 @@ template <typename valuetype>
 struct colorRGBinteger {
  public:
   // Constructors
-  colorRGBinteger(valuetype v) : r_(v), g_(v), b_(v) { }
+  colorRGBinteger(valuetype v = valuetype(0)) : r_(v), g_(v), b_(v) { }
   colorRGBinteger(valuetype r, valuetype g, valuetype b) : r_(r), g_(g), b_(b) { }
   colorRGBinteger(std::string color_string) { 
     std::stringstream color_ss{ color_string };
@@ -60,7 +60,7 @@ template <typename valuetype>
 struct colorRGBAinteger {
  public: 
   // Constructors
-  colorRGBAinteger(valuetype v) : r_(v), g_(v), b_(v) { }
+  colorRGBAinteger(valuetype v = valuetype(0)) : r_(v), g_(v), b_(v) { }
   colorRGBAinteger(valuetype r, valuetype g, valuetype b, valuetype a = valuetype(255)) : r_(r), g_(g), b_(b), a_(a) { }
   colorRGBAinteger(std::string color_string) {
     std::stringstream color_ss{ color_string };
@@ -113,7 +113,7 @@ template <typename valuetype>
 struct colorRGBfloat {
 public:
   // Constructors
-  colorRGBfloat(valuetype v) : r_(v), g_(v), b_(v) { }
+  colorRGBfloat(valuetype v = valuetype(0.0)) : r_(v), g_(v), b_(v) { }
   colorRGBfloat(valuetype r, valuetype g, valuetype b) : r_(r), g_(g), b_(b) { }
   colorRGBfloat(std::string color_string) {
     std::stringstream color_ss{ color_string };
@@ -164,7 +164,7 @@ template <typename valuetype>
 struct colorRGBAfloat {
 public:
   // Constructors
-  colorRGBAfloat(valuetype v) : r_(v), g_(v), b_(v) { }
+  colorRGBAfloat(valuetype v = valuetype(0.0)) : r_(v), g_(v), b_(v) { }
   colorRGBAfloat(valuetype r, valuetype g, valuetype b, valuetype a = valuetype(1.0)) : r_(r), g_(g), b_(b), a_(a) { }
   colorRGBAfloat(std::string color_string) {
     std::stringstream color_ss{ color_string };
