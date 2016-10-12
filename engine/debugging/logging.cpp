@@ -50,6 +50,7 @@ void Logging::InitializeLogChannels() {
 void Logging::InitializeLogChannel(std::string channel, const ConfigFile & config_logging) {
   std::string name;
   std::string tag;
+  std::string color;
   bool timestamp;
   bool out_terminal;
   bool out_file;
@@ -57,12 +58,13 @@ void Logging::InitializeLogChannel(std::string channel, const ConfigFile & confi
 
   config_logging.ReadProperty<std::string>(channel + ".name", &name, channel);
   config_logging.ReadProperty<std::string>(channel + ".tag", &tag, channel.substr(0, 4));
+  config_logging.ReadProperty<std::string>(channel + ".color", &color, "255,255,255");
   config_logging.ReadProperty<bool>(channel + ".timestamp", &timestamp, false);
   config_logging.ReadProperty<bool>(channel + ".out_terminal", &out_terminal, true);
   config_logging.ReadProperty<bool>(channel + ".out_file", &out_file, true);
   config_logging.ReadProperty<bool>(channel + ".out_globalfile", &out_globalfile, true);
 
-  LogChannel log_channel(name, tag, timestamp);
+  LogChannel log_channel(name, tag, cRGBi(color), timestamp);
   if (out_terminal)
     log_channel.RegisterLogOutput(&log_output_terminal_);
   if (out_file)

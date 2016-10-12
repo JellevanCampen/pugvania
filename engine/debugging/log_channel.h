@@ -5,6 +5,7 @@
 #include <string>
 #include <forward_list>
 #include "log_output.h"
+#include "common\datatypes\color_types.h"
 
 namespace engine {
 
@@ -12,9 +13,10 @@ namespace engine {
 // output channel. 
 class LogChannel {
  public:
-  LogChannel(std::string name, std::string tag, bool timestamp = false)
+  LogChannel(std::string name, std::string tag, cRGBi color, bool timestamp = false)
       : name_(name), 
         tag_(tag), 
+        color_(color),
         timestamp_(timestamp) {}
 
   void RegisterLogOutput(LogOutput* log_output);
@@ -22,6 +24,7 @@ class LogChannel {
 
   const std::string name_;
   const std::string tag_;
+  const cRGBi color_;
   const bool timestamp_{ false };
 
  private:
