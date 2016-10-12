@@ -4,6 +4,9 @@
 
 #include <algorithm>
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
 
 namespace engine {
 
@@ -15,6 +18,23 @@ struct colorRGBinteger {
   // Constructors
   colorRGBinteger(valuetype v) : r_(v), g_(v), b_(v) { }
   colorRGBinteger(valuetype r, valuetype g, valuetype b) : r_(r), g_(g), b_(b) { }
+  colorRGBinteger(std::string color_string) { 
+    std::stringstream color_ss{ color_string };
+    std::string value_s;
+    int value_i;
+    std::getline(color_ss, value_s, ',');
+    value_i = std::stoi(value_s.c_str());
+    value_i = value_i < 0 ? 0 : (value_i > 255 ? 255 : value_i);
+    r_ = valuetype(value_i);
+    std::getline(color_ss, value_s, ',');
+    value_i = std::stoi(value_s.c_str());
+    value_i = value_i < 0 ? 0 : (value_i > 255 ? 255 : value_i);
+    g_ = valuetype(value_i);
+    std::getline(color_ss, value_s, ',');
+    value_i = std::stoi(value_s.c_str());
+    value_i = value_i < 0 ? 0 : (value_i > 255 ? 255 : value_i);
+    b_ = valuetype(value_i);
+  }
 
   // Operators
   inline colorRGBinteger operator+ (const colorRGBinteger& other) const { return colorRGBinteger(unsigned int(r_) + unsigned int(other.r_) > 255u ? valuetype(255) : valuetype(r_ + other.r_), unsigned int(g_) + unsigned int(other.g_) > 255u ? valuetype(255) : valuetype(g_ + other.g_), unsigned int(b_) + unsigned int(other.b_) > 255u ? valuetype(255) : valuetype(b_ + other.b_)); }
@@ -35,6 +55,27 @@ struct colorRGBAinteger {
   // Constructors
   colorRGBAinteger(valuetype v) : r_(v), g_(v), b_(v) { }
   colorRGBAinteger(valuetype r, valuetype g, valuetype b, valuetype a = valuetype(255)) : r_(r), g_(g), b_(b), a_(a) { }
+  colorRGBAinteger(std::string color_string) {
+    std::stringstream color_ss{ color_string };
+    std::string value_s;
+    int value_i;
+    std::getline(color_ss, value_s, ',');
+    value_i = std::stoi(value_s.c_str());
+    value_i = value_i < 0 ? 0 : (value_i > 255 ? 255 : value_i);
+    r_ = valuetype(value_i);
+    std::getline(color_ss, value_s, ',');
+    value_i = std::stoi(value_s.c_str());
+    value_i = value_i < 0 ? 0 : (value_i > 255 ? 255 : value_i);
+    g_ = valuetype(value_i);
+    std::getline(color_ss, value_s, ',');
+    value_i = std::stoi(value_s.c_str());
+    value_i = value_i < 0 ? 0 : (value_i > 255 ? 255 : value_i);
+    b_ = valuetype(value_i);
+    std::getline(color_ss, value_s, ',');
+    value_i = std::stoi(value_s.c_str());
+    value_i = value_i < 0 ? 0 : (value_i > 255 ? 255 : value_i);
+    a_ = valuetype(value_i);
+  }
   template <typename cast_valuetype> colorRGBAinteger(const colorRGBinteger<cast_valuetype>& c) : r_(valuetype(c.r_)), g_(valuetype(c.g_)), b_(valuetype(c.b_)) { }
    
   // Casts
@@ -59,6 +100,23 @@ public:
   // Constructors
   colorRGBfloat(valuetype v) : r_(v), g_(v), b_(v) { }
   colorRGBfloat(valuetype r, valuetype g, valuetype b) : r_(r), g_(g), b_(b) { }
+  colorRGBfloat(std::string color_string) {
+    std::stringstream color_ss{ color_string };
+    std::string value_s;
+    float value_f;
+    std::getline(color_ss, value_s, ',');
+    value_f = std::stof(value_s.c_str());
+    value_f = value_f < 0.0f ? 0.0f : (value_f > 1.0f ? 1.0f : value_f);
+    r_ = valuetype(value_f);
+    std::getline(color_ss, value_s, ',');
+    value_f = std::stof(value_s.c_str());
+    value_f = value_f < 0.0f ? 0.0f : (value_f > 1.0f ? 1.0f : value_f);
+    g_ = valuetype(value_f);
+    std::getline(color_ss, value_s, ',');
+    value_f = std::stof(value_s.c_str());
+    value_f = value_f < 0.0f ? 0.0f : (value_f > 1.0f ? 1.0f : value_f);
+    b_ = valuetype(value_f);
+  }
   template <typename cast_valuetype> colorRGBfloat(const colorRGBinteger<cast_valuetype>& c) : r_(valuetype(c.r_) / valuetype(255.0)), g_(valuetype(c.g_) / valuetype(255.0)), b_(valuetype(c.b_) / valuetype(255.0)) { }
   template <typename cast_valuetype> colorRGBfloat(const colorRGBAinteger<cast_valuetype>& c) : r_(valuetype(c.r_) / valuetype(255.0)), g_(valuetype(c.g_) / valuetype(255.0)), b_(valuetype(c.b_) / valuetype(255.0)) { }
 
@@ -86,6 +144,27 @@ public:
   // Constructors
   colorRGBAfloat(valuetype v) : r_(v), g_(v), b_(v) { }
   colorRGBAfloat(valuetype r, valuetype g, valuetype b, valuetype a = valuetype(1.0)) : r_(r), g_(g), b_(b), a_(a) { }
+  colorRGBAfloat(std::string color_string) {
+    std::stringstream color_ss{ color_string };
+    std::string value_s;
+    float value_f;
+    std::getline(color_ss, value_s, ',');
+    value_f = std::stof(value_s.c_str());
+    value_f = value_f < 0.0f ? 0.0f : (value_f > 1.0f ? 1.0f : value_f);
+    r_ = valuetype(value_f);
+    std::getline(color_ss, value_s, ',');
+    value_f = std::stof(value_s.c_str());
+    value_f = value_f < 0.0f ? 0.0f : (value_f > 1.0f ? 1.0f : value_f);
+    g_ = valuetype(value_f);
+    std::getline(color_ss, value_s, ',');
+    value_f = std::stof(value_s.c_str());
+    value_f = value_f < 0.0f ? 0.0f : (value_f > 1.0f ? 1.0f : value_f);
+    b_ = valuetype(value_f);
+    std::getline(color_ss, value_s, ',');
+    value_f = std::stof(value_s.c_str());
+    value_f = value_f < 0.0f ? 0.0f : (value_f > 1.0f ? 1.0f : value_f);
+    a_ = valuetype(value_f);
+  }
   template <typename cast_valuetype> colorRGBAfloat(const colorRGBinteger<cast_valuetype>& c) : r_(valuetype(c.r_) / valuetype(255.0)), g_(valuetype(c.g_) / valuetype(255.0)), b_(valuetype(c.b_) / valuetype(255.0)) { }
   template <typename cast_valuetype> colorRGBAfloat(const colorRGBAinteger<cast_valuetype>& c) : r_(valuetype(c.r_) / valuetype(255.0)), g_(valuetype(c.g_) / valuetype(255.0)), b_(valuetype(c.b_) / valuetype(255.0)), a_(valuetype(c.a_) / valuetype(255.0)) { }
   template <typename cast_valuetype> colorRGBAfloat(const colorRGBfloat<cast_valuetype>& c) : r_(valuetype(c.r_)), g_(valuetype(c.g_)), b_(valuetype(c.b_)) { }
