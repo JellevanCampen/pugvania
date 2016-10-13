@@ -20,6 +20,7 @@ source_group (engine FILES ${SRC_ENGINE})
 # [ engine/common/datatypes ]
 set (SRC_ENGINE_COMMON_DATATYPES 
 	"common/datatypes/color_types.h"
+	"common/datatypes/shape_types.h"
 	)
 source_group (engine\\common\\datatypes FILES ${SRC_ENGINE_COMMON_DATATYPES})
 

@@ -10,8 +10,7 @@
 
 namespace engine {
 
-// Represents a Red, Green, Blue (RGB) color, with components stored as 
-// integer values. 
+// Represents a Red, Green, Blue (RGB) color with integer components. 
 template <typename valuetype>
 struct colorRGBinteger {
  public:
@@ -41,7 +40,7 @@ struct colorRGBinteger {
   inline colorRGBinteger operator- (const colorRGBinteger& other) const { return colorRGBinteger(r_>other.r_ ? r_ - other.r_ : valuetype(0), g_>other.g_ ? g_ - other.g_ : valuetype(0), b_>other.b_ ? b_ - other.b_ : valuetype(0)); }
   inline colorRGBinteger operator* (float scalar) const { return colorRGBinteger(unsigned int(0.5f + r_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + r_ * scalar), unsigned int(0.5f + g_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + g_ * scalar), unsigned int(0.5f + b_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + b_ * scalar)); }
   inline colorRGBinteger operator/ (float scalar) const { return colorRGBinteger(unsigned int(0.5f + r_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + r_ / scalar), unsigned int(0.5f + g_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + g_ / scalar), unsigned int(0.5f + b_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + b_ / scalar)); }
-  friend std::ostream& operator<<(std::ostream &os, colorRGBinteger const &c) { return os << "(" << unsigned int(c.r_) << ", " << unsigned int(c.g_) << ", " << unsigned int(c.b_) << ")"; }
+  friend std::ostream& operator<<(std::ostream &os, const colorRGBinteger& c) { return os << "(" << unsigned int(c.r_) << ", " << unsigned int(c.g_) << ", " << unsigned int(c.b_) << ")"; }
 
   float distance(const colorRGBinteger& other) const { 
     float dr = float(r_) - float(other.r_); 
@@ -52,10 +51,9 @@ struct colorRGBinteger {
 
   valuetype r_{ valuetype(0) }, g_{ valuetype(0) }, b_{ valuetype(0) };
 };
-typedef colorRGBinteger<unsigned char> cRGBi;
+typedef colorRGBinteger<unsigned char> ColorRGBi, cRGBi;
 
-// Represents a Red, Green, Blue, Alpha (RGBA) color, with components stored 
-// as integer values. 
+// Represents a Red, Green, Blue, Alpha (RGBA) color with integer components. 
 template <typename valuetype>
 struct colorRGBAinteger {
  public: 
@@ -93,7 +91,7 @@ struct colorRGBAinteger {
   inline colorRGBAinteger operator- (const colorRGBAinteger& other) const { return colorRGBAinteger(r_>other.r_ ? r_-other.r_ : valuetype(0), g_>other.g_ ? g_ - other.g_ : valuetype(0), b_>other.b_ ? b_ - other.b_ : valuetype(0), a_); }
   inline colorRGBAinteger operator* (float scalar) const { return colorRGBAinteger(unsigned int(0.5f + r_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + r_ * scalar), unsigned int(0.5f + g_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + g_ * scalar), unsigned int(0.5f + b_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + b_ * scalar), unsigned int(0.5f + a_ * scalar) > 255 ? valuetype(255) : valuetype(0.5f + a_ * scalar)); }
   inline colorRGBAinteger operator/ (float scalar) const { return colorRGBAinteger(unsigned int(0.5f + r_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + r_ / scalar), unsigned int(0.5f + g_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + g_ / scalar), unsigned int(0.5f + b_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + b_ / scalar), unsigned int(0.5f + a_ / scalar) > 255 ? valuetype(255) : valuetype(0.5f + a_ / scalar)); }
-  friend std::ostream& operator<<(std::ostream &os, colorRGBAinteger const &c) { return os << "(" << unsigned int(c.r_) << ", " << unsigned int(c.g_) << ", " << unsigned int(c.b_) << ", " << unsigned int(c.a_) << ")"; }
+  friend std::ostream& operator<<(std::ostream &os, const colorRGBAinteger& c) { return os << "(" << unsigned int(c.r_) << ", " << unsigned int(c.g_) << ", " << unsigned int(c.b_) << ", " << unsigned int(c.a_) << ")"; }
 
   float distance(const colorRGBAinteger& other) const {
     float dr = float(r_) - float(other.r_);
@@ -105,10 +103,9 @@ struct colorRGBAinteger {
 
   valuetype r_{ valuetype(0) }, g_{ valuetype(0) }, b_{ valuetype(0) }, a_{ valuetype(255) };
 };
-typedef colorRGBAinteger<unsigned char> cRGBAi;
+typedef colorRGBAinteger<unsigned char> ColorRGBAi, cRGBAi;
 
-// Represents a Red, Green, Blue (RGB) color, with components stored as 
-// float values. 
+// Represents a Red, Green, Blue (RGB) color, with float components. 
 template <typename valuetype>
 struct colorRGBfloat {
 public:
@@ -144,7 +141,7 @@ public:
   inline colorRGBfloat operator- (const colorRGBfloat& other) const { return colorRGBfloat(r_>other.r_ ? r_ - other.r_ : valuetype(0.0), g_>other.g_ ? g_ - other.g_ : valuetype(0.0), b_>other.b_ ? b_ - other.b_ : valuetype(0.0)); }
   inline colorRGBfloat operator* (valuetype scalar) const { return colorRGBfloat(std::min(r_ * scalar, valuetype(1.0)), std::min(g_ * scalar, valuetype(1.0)), std::min(b_ * scalar, valuetype(1.0))); }
   inline colorRGBfloat operator/ (valuetype scalar) const { return colorRGBfloat(std::min(r_ / scalar, valuetype(1.0)), std::min(g_ / scalar, valuetype(1.0)), std::min(b_ / scalar, valuetype(1.0))); }
-  friend std::ostream& operator<<(std::ostream &os, colorRGBfloat const &c) { return os << "(" << c.r_ << ", " << c.g_ << ", " << c.b_ << ")"; }
+  friend std::ostream& operator<<(std::ostream &os, const colorRGBfloat& c) { return os << "(" << c.r_ << ", " << c.g_ << ", " << c.b_ << ")"; }
 
   float distance(const colorRGBinteger& other) const {
     float dr = float(r_) - float(other.r_);
@@ -155,11 +152,10 @@ public:
 
   valuetype r_{ valuetype(0.0) }, g_{ valuetype(0.0) }, b_{ valuetype(0.0) };
 };
-typedef colorRGBfloat<float> cRGBf;
-typedef colorRGBfloat<double> cRGBd;
+typedef colorRGBfloat<float> ColorRGBf, cRGBf;
+typedef colorRGBfloat<double> ColorRGBd, cRGBd;
 
-// Represents a Red, Green, Blue, Alpha (RGBA) color, with components stored 
-// as float values. 
+// Represents a Red, Green, Blue, Alpha (RGBA) color, with float components. 
 template <typename valuetype>
 struct colorRGBAfloat {
 public:
@@ -201,7 +197,7 @@ public:
   inline colorRGBAfloat operator- (const colorRGBAfloat& other) const { return colorRGBAfloat(r_>other.r_ ? r_ - other.r_ : valuetype(0.0), g_>other.g_ ? g_ - other.g_ : valuetype(0.0), b_>other.b_ ? b_ - other.b_ : valuetype(0.0), a_>other.a_ ? a_ - other.a_ : valuetype(0.0)); }
   inline colorRGBAfloat operator* (valuetype scalar) const { return colorRGBAfloat(std::min(r_ * scalar, valuetype(1.0)), std::min(g_ * scalar, valuetype(1.0)), std::min(b_ * scalar, valuetype(1.0)), std::min(a_ * scalar, valuetype(1.0))); }
   inline colorRGBAfloat operator/ (valuetype scalar) const { return colorRGBAfloat(std::min(r_ / scalar, valuetype(1.0)), std::min(g_ / scalar, valuetype(1.0)), std::min(b_ / scalar, valuetype(1.0)), std::min(a_ / scalar, valuetype(1.0))); }
-  friend std::ostream& operator<<(std::ostream &os, colorRGBAfloat const &c) { return os << "(" << c.r_ << ", " << c.g_ << ", " << c.b_ << ", " << c.a_ << ")"; }
+  friend std::ostream& operator<<(std::ostream &os, const colorRGBAfloat& c) { return os << "(" << c.r_ << ", " << c.g_ << ", " << c.b_ << ", " << c.a_ << ")"; }
 
   float distance(const colorRGBAinteger& other) const {
     float dr = float(r_) - float(other.r_);
@@ -213,8 +209,8 @@ public:
 
   valuetype r_{ valuetype(0.0) }, g_{ valuetype(0.0) }, b_{ valuetype(0.0) }, a_{ valuetype(1.0) };
 };
-typedef colorRGBAfloat<float> cRGBAf;
-typedef colorRGBAfloat<double> cRGBAd;
+typedef colorRGBAfloat<float> ColorRGBAf, cRGBAf;
+typedef colorRGBAfloat<double> ColorRGBAd, cRGBAd;
 
 } // namespace
 
