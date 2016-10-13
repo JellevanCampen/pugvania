@@ -91,8 +91,10 @@ void Engine::Initialize() {
 #endif
 
   // Initialize all subsystems in forward order. 
-  for (EngineSubsystem* subsystem : subsystems_)
+  for (EngineSubsystem* subsystem : subsystems_) {
     subsystem->Initialize();
+    LogInitializationMessage(subsystem);
+  }
 
   // Load the engine configuration from engine_config.ini
   LoadConfiguration();
@@ -109,8 +111,40 @@ void Engine::Terminate() {
   g_log("Engine terminating.", log::kEngine);
 
   // Terminate all subsystems in reverse order.
-  for (EngineSubsystem* subsystem : reverse(subsystems_))
+  for (EngineSubsystem* subsystem : reverse(subsystems_)) {
     subsystem->Terminate();
+    LogTerminationMessage(subsystem);
+  }
+}
+
+void Engine::LogInitializationMessage(EngineSubsystem* subsystem) {
+  const void* adress = static_cast<const void*>(subsystem);
+  std::stringstream message;
+  message << subsystem->GetName() << " subsystem initialized at 0x" << adress << ".";
+
+  // Only use the logger when the logging subsystem has been initialized. 
+  if (logger_initialized_ == true)
+    g_log(message.str(), log::kEngine);
+  else if (subsystem->GetName().compare("Logging") == 0) {
+    g_log(message.str(), log::kEngine);
+    logger_initialized_ = true;
+  } else {
+    std::cout << message.str() << std::endl;
+  }
+}
+
+void Engine::LogTerminationMessage(EngineSubsystem* subsystem) {
+  std::stringstream message;
+  message << subsystem->GetName() << " subsystem terminated.";
+
+  // Only use the logger when the logging subsystem has been initialized. 
+  if (logger_initialized_ == false) 
+    std::cout << message.str() << std::endl;
+  else if (subsystem->GetName().compare("Logging") == 0) {
+    std::cout << message.str() << std::endl;
+    logger_initialized_ = false;
+  } else
+    g_log(message.str(), log::kEngine);
 }
 
 void Engine::LoadConfiguration()
@@ -128,6 +162,8 @@ void Engine::RunGameLoop() {
   TimePointMicros time_previous = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
   DurationMicros lag{ 0 };
   bool update_drawn{ false };
+
+  timing->PassStartSignal();
 
   while (is_running_) {
     TimePointMicros time_current = std::chrono::time_point_cast<DurationMicros>(std::chrono::high_resolution_clock::now());
@@ -165,6 +201,8 @@ void Engine::RunGameLoop() {
 }
 
 void Engine::Update(unsigned int delta_time_micros) {
+  timing->PassUpdateTimingInfo(delta_time_micros);
+
   // Update all engine subsystems in forward order.
   for (EngineSubsystem* subsystem : subsystems_)
     subsystem->Update();
@@ -182,6 +220,8 @@ void Engine::Update(unsigned int delta_time_micros) {
 }
 
 void Engine::Draw(float frame_interpolation) {
+  timing->PassDrawTimingInfo(frame_interpolation);
+
   // Draw all engine subsystems in forward order.
   for (EngineSubsystem* subsystem : subsystems_)
     subsystem->Draw();

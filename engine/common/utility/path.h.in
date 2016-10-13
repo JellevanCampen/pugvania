@@ -12,8 +12,7 @@ namespace engine {
 // relative path to resource directories. 
 class Path : public EngineSubsystem{
  public:
-  // The constructor loads the path configuration from the path_config.ini file 
-  // in the project root directory.  
+  virtual const std::string& GetName() { return "Path"; }
   virtual void Initialize() override;
   virtual void Terminate() override;
   virtual void Update() override { }

@@ -10,6 +10,7 @@ namespace engine {
 // Keeps information on the timing of the game loop.
 class Timing : public EngineSubsystem {
  public: 
+  virtual std::string GetName() const { return "Timing"; }
   virtual void Initialize() override;
   virtual void Terminate() override;
   virtual void Update() override;
@@ -30,7 +31,13 @@ class Timing : public EngineSubsystem {
 
   void LoadConfiguration();
 
-  bool started_{ false };
+  void SampleUpdateRate();
+  void SampleDrawRate();
+
+  // Hook into the game loop to retrieve specific timing info. 
+  void PassStartSignal();
+  void PassUpdateTimingInfo(unsigned int delta_time_micros);
+  void PassDrawTimingInfo(float frame_interpolation);
 
   unsigned int delta_time_micros_{ 0 };
   unsigned int total_time_micros_{ 0 };
@@ -49,6 +56,9 @@ class Timing : public EngineSubsystem {
   unsigned short int draw_rate_sample_{ 10 };
   // Size off the rolling average window to smooth the update and draw rates.
   unsigned short int rate_rolling_average_window_{ 4 };
+
+  // The engine passes timing info via Pass{Update|Draw}TimingInfo().
+  friend class Engine;
 };
 
 } // namespace

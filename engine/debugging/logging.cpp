@@ -7,15 +7,9 @@ namespace engine {
 void Logging::Initialize() {
   InitializeLogOutputs();
   InitializeLogChannels();
-  
-  const void* adress = static_cast<const void*>(this);
-  std::stringstream init_message;
-  init_message << "Logging subsystem initialized at 0x" << adress;
-  Log(init_message.str(), log::kEngine);
 }
 
 void Logging::Terminate() {
-  Log("Logging subsystem terminating.", log::kEngine);
   TerminateLogOutputs();
   log_channels_.clear();
 }

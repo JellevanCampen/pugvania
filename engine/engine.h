@@ -53,6 +53,8 @@ class Engine {
   void DestroySubsystems();
   void Initialize();
   void Terminate();
+  void LogInitializationMessage(EngineSubsystem* subsystem);
+  void LogTerminationMessage(EngineSubsystem* subsystem);
 
   void LoadConfiguration();
   void RunGameLoop();
@@ -62,6 +64,7 @@ class Engine {
   std::list<EngineSubsystem*> subsystems_;
 
   bool is_running_{ false };
+  bool logger_initialized_{ false };
 
   // Whether or not output should be drawn on screen. Can be disabled to speed 
   // up simulations by only performing updates. 

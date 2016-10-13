@@ -2,6 +2,8 @@
 #ifndef ENGINE_ENGINESUBSYSTEM_H_
 #define ENGINE_ENGINESUBSYSTEM_H_
 
+#include <string>
+
 namespace engine {
 
 // Interface for subsystems of the engine. When plugged into the engine, 
@@ -11,6 +13,7 @@ class EngineSubsystem {
   virtual ~EngineSubsystem() {}
 
  protected:
+   virtual std::string GetName() const = 0;
    virtual void Initialize() = 0;
    virtual void Terminate() = 0;
    virtual void Update() = 0;
