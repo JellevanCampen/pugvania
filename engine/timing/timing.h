@@ -28,6 +28,8 @@ class Timing : public EngineSubsystem {
   typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
   typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
 
+  void LoadConfiguration();
+
   bool started_{ false };
 
   unsigned int delta_time_micros_{ 0 };

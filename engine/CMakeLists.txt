@@ -17,13 +17,6 @@ set (SRC_ENGINE
 	)
 source_group (engine FILES ${SRC_ENGINE})
 
-# [ engine/common ]
-set (SRC_ENGINE_COMMON 
-	"common/game_time.h"
-	"common/game_time.cpp"
-	)
-source_group (engine\\common FILES ${SRC_ENGINE_COMMON})
-
 # [ engine/common/datatypes ]
 set (SRC_ENGINE_COMMON_DATATYPES 
 	"common/datatypes/color_types.h"

@@ -5,6 +5,8 @@
 namespace engine {
 
 void Timing::Initialize() {
+  LoadConfiguration();
+
   const void* adress = static_cast<const void*>(this);
   std::stringstream init_message;
   init_message << "Timing subsystem initialized at 0x" << adress;
@@ -51,6 +53,13 @@ void Timing::Draw() {
     float draw_rate_current = draw_rate_sample_ * 1000000.0f / ((float)elapsed.count());
     draw_rate_ = (draw_rate_ * (rate_rolling_average_window_ - 1) + (draw_rate_current)) / rate_rolling_average_window_;
   }
+}
+
+void Timing::LoadConfiguration() {
+  ConfigFile engine_config((*g_engine->path)["config"] + "engine_config.ini", ConfigFile::WARN_COUT, ConfigFile::WARN_COUT);
+  engine_config.ReadProperty<unsigned short int>("timing.update_rate_sample", &update_rate_sample_, 10);
+  engine_config.ReadProperty<unsigned short int>("timing.draw_rate_sample", &draw_rate_sample_, 10);
+  engine_config.ReadProperty<unsigned short int>("timing.rate_rolling_average_window", &rate_rolling_average_window_, 4);
 }
 
 }; // namespace

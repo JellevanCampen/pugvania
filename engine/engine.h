@@ -5,7 +5,6 @@
 #include <chrono>
 #include <list>
 #include <iostream>
-#include "common/game_time.h"
 #include "engine_subsystem.h"
 #include "common/utility/path.h"
 #include "debugging/logging.h"
@@ -35,8 +34,6 @@ class Engine {
   void Start();
   void Stop();
 
-  const GameTime& GetGameTime() const { return game_time_; }
-
   // Pointers that give access to all engine subsystems. Safe to use after 
   // Create() was called and before Destroy() was called. 
   Path* path{ NULL };
@@ -57,7 +54,7 @@ class Engine {
   void Initialize();
   void Terminate();
 
-  void LoadEngineConfiguration();
+  void LoadConfiguration();
   void RunGameLoop();
   void Update(unsigned int delta_time_micros);
   void Draw(float frame_interpolation);
@@ -65,7 +62,6 @@ class Engine {
   std::list<EngineSubsystem*> subsystems_;
 
   bool is_running_{ false };
-  GameTime game_time_{ };
 
   // Whether or not output should be drawn on screen. Can be disabled to speed 
   // up simulations by only performing updates. 
@@ -86,15 +82,6 @@ class Engine {
   // The maximum of draws to drop before forcedly rendering one, in case the 
   // update + draw time is longer than the desired fixed update rate. 
   unsigned short int max_frame_skip_{ 5 };
-
-  // Rate at which to sample update timings to determine the update rate. 
-  unsigned short int update_rate_sample_{ 10 };
-  // Rate at which to sample draw timings to determine the draw rate. 
-  unsigned short int draw_rate_sample_{ 10 };
-  // Size off the rolling average window used to smooth the update rate and 
-  // draw rate measurements. A smaller window offers more precision but a 
-  // higher amount of jitter. A larger window offers the opposite. 
-  unsigned short int rate_rolling_average_window_{ 4 };
 };
 
 } // namespace

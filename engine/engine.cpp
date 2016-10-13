@@ -95,7 +95,7 @@ void Engine::Initialize() {
     subsystem->Initialize();
 
   // Load the engine configuration from engine_config.ini
-  LoadEngineConfiguration();
+  LoadConfiguration();
 
   // Log a message on initialization.
   const void* engine_adress = static_cast<const void*>(this);
@@ -113,7 +113,7 @@ void Engine::Terminate() {
     subsystem->Terminate();
 }
 
-void Engine::LoadEngineConfiguration()
+void Engine::LoadConfiguration()
 {
   ConfigFile engine_config((*g_engine->path)["config"] + "engine_config.ini", ConfigFile::WARN_COUT, ConfigFile::WARN_COUT);
   engine_config.ReadProperty<bool>("engine.drawing_is_enabled", &drawing_is_enabled_, true);
@@ -121,9 +121,6 @@ void Engine::LoadEngineConfiguration()
   engine_config.ReadProperty<unsigned int>("engine.time_step_micros", &time_step_micros_, 1000000 / 60);
   engine_config.ReadProperty<bool>("engine.draw_rate_is_capped", &draw_rate_is_capped_, false);
   engine_config.ReadProperty<unsigned short int>("engine.max_frame_skip", &max_frame_skip_, 5);
-  engine_config.ReadProperty<unsigned short int>("engine.update_rate_sample", &update_rate_sample_, 10);
-  engine_config.ReadProperty<unsigned short int>("engine.draw_rate_sample", &draw_rate_sample_, 10);
-  engine_config.ReadProperty<unsigned short int>("engine.rate_rolling_average_window", &rate_rolling_average_window_, 4);
 }
 
 void Engine::RunGameLoop() {
@@ -168,16 +165,13 @@ void Engine::RunGameLoop() {
 }
 
 void Engine::Update(unsigned int delta_time_micros) {
-  // Update game timing information first, as it is used by all other updates. 
-  game_time_.Update(delta_time_micros);
-
   // Update all engine subsystems in forward order.
   for (EngineSubsystem* subsystem : subsystems_)
     subsystem->Update();
 
   // TODO(Jelle): Remove this later. This is temporary code to shut down the 
   // engine after 5 seconds for debugging purposes.
-  if (game_time_.GetTotalTimeMicros() >= 5000000)
+  if (timing->GetTotalTimeMicros() >= 5000000)
     Stop();
   // TODO(Jelle): Remove this when the Timing is fully functional. This is 
   // temporary display rate measurement info. 
@@ -188,9 +182,6 @@ void Engine::Update(unsigned int delta_time_micros) {
 }
 
 void Engine::Draw(float frame_interpolation) {
-  // Update game timing information first, as it is used by all other draws. 
-  game_time_.Draw(frame_interpolation);
-
   // Draw all engine subsystems in forward order.
   for (EngineSubsystem* subsystem : subsystems_)
     subsystem->Draw();
