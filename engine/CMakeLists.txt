@@ -55,6 +55,12 @@ set (SRC_ENGINE_DEBUGGING
 	)
 source_group (engine\\debugging FILES ${SRC_ENGINE_DEBUGGING})
 
+# [ engine/graphics ]
+set (SRC_ENGINE_GRAPHICS
+	"graphics/graphics.h"
+	)
+source_group (engine\\graphics FILES ${SRC_ENGINE_GRAPHICS})
+
 # [ engine/timing ]
 set (SRC_ENGINE_TIMING
 	"timing/timing.h"
@@ -70,6 +76,7 @@ set (SRC_ALL
 	${SRC_ENGINE_COMMON_PATTERNS}
 	${SRC_ENGINE_COMMON_UTILITY}
 	${SRC_ENGINE_DEBUGGING}
+	${SRC_ENGINE_GRAPHICS}
 	${SRC_ENGINE_TIMING}
 	)
 
