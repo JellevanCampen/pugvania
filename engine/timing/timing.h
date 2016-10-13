@@ -10,24 +10,23 @@ namespace engine {
 // Keeps information on the timing of the game loop.
 class Timing : public EngineSubsystem {
  public: 
-  virtual std::string GetName() const { return "Timing"; }
-  virtual void Initialize() override;
-  virtual void Terminate() override;
-  virtual void Update() override;
-  virtual void Draw() override;
-
   unsigned int GetDeltaTimeMicros() const { return delta_time_micros_; }
   unsigned int GetTotalTimeMicros() const { return total_time_micros_; }
   unsigned int GetUpdateCount() const { return update_count_; }
   unsigned int GetDrawCount() const { return draw_count_; }
   float GetFrameInterpolation() const { return frame_interpolation_; }
-
   float GetUpdateRate() const { return update_rate_; }
   float GetDrawRate() const { return draw_rate_; }
 
  private:
   typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
   typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
+
+  virtual std::string GetName() const { return "Timing"; }
+  virtual void Initialize() override;
+  virtual void Terminate() override;
+  virtual void Update() override;
+  virtual void Draw() override;
 
   void LoadConfiguration();
 

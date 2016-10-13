@@ -24,10 +24,7 @@ void g_log(std::string message, LogID channels = log::kDefault);
 
 // Manages the game loop and all subsystems used to run the Game. 
 class Engine {
- public:
-  Engine(Engine const&) = delete;
-  void operator=(const Engine&) = delete;
-  
+ public:  
   static void Create();
   static void Destroy();
   
@@ -44,11 +41,12 @@ class Engine {
   typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
   typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
 
-  // Allocates all Engine subsystems but does not perform initialization yet. 
-  // Private constructor to ensure only a single Engine instance exists, 
-  // following the singleton pattern. 
+  // Private constructor to ensure only a single Engine instance.
   Engine() { }
   ~Engine() { }
+  Engine(Engine const&) = delete;
+  void operator=(const Engine&) = delete;
+
   void CreateSubsystems();
   void DestroySubsystems();
   void Initialize();

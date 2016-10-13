@@ -30,14 +30,15 @@ namespace log {
 // files. 
 class Logging : public EngineSubsystem{
  public:
-  virtual std::string GetName() const { return "Logging"; }
-  virtual void Initialize() override;
-  virtual void Terminate() override;
-  virtual void Update() override { }
-  virtual void Draw() override { }
   void Log(std::string message, LogID channels = log::kDefault);
 
  private:
+   virtual std::string GetName() const { return "Logging"; }
+   virtual void Initialize() override;
+   virtual void Terminate() override;
+   virtual void Update() override { }
+   virtual void Draw() override { }
+
    void InitializeLogOutputs();
    void InitializeLogChannels();
    void InitializeLogChannel(std::string channel, const ConfigFile& config_logging);

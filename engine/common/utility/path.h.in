@@ -12,15 +12,15 @@ namespace engine {
 // relative path to resource directories. 
 class Path : public EngineSubsystem{
  public:
-  virtual const std::string& GetName() { return "Path"; }
+  std::string operator[](const std::string directory) const;
+
+ private:
+  virtual std::string GetName() const { return "Path"; }
   virtual void Initialize() override;
   virtual void Terminate() override;
   virtual void Update() override { }
   virtual void Draw() override { }
-
-  std::string operator[](const std::string directory) const;
-
- private:
+  
   // Path to the project root directory (configured in top-level CMakeLists.txt). 
   std::string root_{ "${ROOT_DIRECTORY}" };
   std::unordered_map<std::string,std::string> directories_;

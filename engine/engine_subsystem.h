@@ -9,10 +9,9 @@ namespace engine {
 // Interface for subsystems of the engine. When plugged into the engine, 
 // subsystems are automatically initialized, updated, drawn, and terminated. 
 class EngineSubsystem {
- public:
-  virtual ~EngineSubsystem() {}
-
  protected:
+   virtual ~EngineSubsystem() { }
+
    virtual std::string GetName() const = 0;
    virtual void Initialize() = 0;
    virtual void Terminate() = 0;
