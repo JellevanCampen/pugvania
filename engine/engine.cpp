@@ -200,7 +200,7 @@ void Engine::RunGameLoop() {
   }
 }
 
-void Engine::Update(unsigned int delta_time_micros) {
+void Engine::Update(unsigned long long delta_time_micros) {
   timing->PassUpdateTimingInfo(delta_time_micros);
 
   // Update all engine subsystems in forward order.

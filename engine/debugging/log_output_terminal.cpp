@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "log_channel.h"
+#include "engine.h"
 
 #ifdef PF_WINDOWS 
 #include <Windows.h>
@@ -30,11 +31,8 @@ void LogOutputTerminal::Log(const LogChannel& log_channel, std::string message) 
   }
   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), int(color_code));
 #endif // PF_WINDOWS
-  
   std::string m;
-  // TODO(Jelle): Print the correct time stamp once it's retrievable in the 
-  // engine
-  if (log_channel.timestamp_) { m += "[TIME_STAMP] "; }
+  if (log_channel.timestamp_) { m += "[" + g_engine->timing->GetTimestamp() + "] "; }
   m += log_channel.tag_ + ": " + message;
   std::cout << m << std::endl;
 }

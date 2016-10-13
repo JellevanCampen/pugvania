@@ -38,7 +38,7 @@ class Engine {
   Timing* timing{ NULL };
 
  private:
-  typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
+  typedef std::chrono::duration<unsigned long long, std::micro> DurationMicros;
   typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
 
   // Private constructor to ensure only a single Engine instance.
@@ -56,7 +56,7 @@ class Engine {
 
   void LoadConfiguration();
   void RunGameLoop();
-  void Update(unsigned int delta_time_micros);
+  void Update(unsigned long long delta_time_micros);
   void Draw(float frame_interpolation);
 
   std::list<EngineSubsystem*> subsystems_;

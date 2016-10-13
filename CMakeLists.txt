@@ -14,6 +14,9 @@ cmake_minimum_required (VERSION 2.6)
 #
 
 project (pugvania)
+set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+set (CMAKE_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set (CMAKE_LIBRARY_PATH "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
 #
 # Version information

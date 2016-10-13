@@ -91,6 +91,14 @@ target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 # [Boost]
 find_package(Boost 1.62.0 REQUIRED)
 if (Boost_FOUND)
+	message(STATUS ">> Found: Boost 1.62.0 library")
 	target_include_directories(engine PUBLIC ${Boost_INCLUDE_DIRS})
 	target_link_libraries(engine PUBLIC ${Boost_LIBRARIES})
 endif (Boost_FOUND)
+
+# [Date]
+find_package(Date REQUIRED)
+if (Date_FOUND)
+	message(STATUS ">> Found: Howard Hinnant's Date library")
+    target_include_directories(engine PUBLIC ${Date_INCLUDE_DIRS})
+endif (Date_FOUND)

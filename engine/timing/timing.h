@@ -3,6 +3,7 @@
 #define ENGINE_TIMING_TIMING_H_
 
 #include <chrono>
+#include <string>
 #include "engine_subsystem.h"
 
 namespace engine {
@@ -10,16 +11,22 @@ namespace engine {
 // Keeps information on the timing of the game loop.
 class Timing : public EngineSubsystem {
  public: 
-  unsigned int GetDeltaTimeMicros() const { return delta_time_micros_; }
-  unsigned int GetTotalTimeMicros() const { return total_time_micros_; }
-  unsigned int GetUpdateCount() const { return update_count_; }
-  unsigned int GetDrawCount() const { return draw_count_; }
+  unsigned long long GetDeltaTimeMicros() const { return delta_time_micros_; }
+  unsigned long long GetTotalTimeMicros() const { return total_time_micros_; }
+  unsigned long long GetUpdateCount() const { return update_count_; }
+  unsigned long long GetDrawCount() const { return draw_count_; }
   float GetFrameInterpolation() const { return frame_interpolation_; }
   float GetUpdateRate() const { return update_rate_; }
   float GetDrawRate() const { return draw_rate_; }
+  std::string GetTimestamp(bool include_date = false);
+
+  static unsigned long long MicrosToDays(unsigned long long micros) { return micros / (1000000llu * 60 * 60 * 24); }
+  static unsigned long long MicrosToHours(unsigned long long micros, bool modulus = false) { return modulus ? (micros / (1000000llu * 60 * 60)) % 24 : micros / (1000000llu * 60 * 60); }
+  static unsigned long long MicrosToMinutes(unsigned long long micros, bool modulus = false) { return modulus ? (micros / (1000000llu * 60)) % 60 : micros / (1000000llu * 60); }
+  static unsigned long long MicrosToSeconds(unsigned long long micros, bool modulus = false) { return modulus ? (micros / 1000000llu) % 60 : micros / 1000000llu; }
 
  private:
-  typedef std::chrono::duration<unsigned int, std::micro> DurationMicros;
+  typedef std::chrono::duration<unsigned long long, std::micro> DurationMicros;
   typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
 
   virtual std::string GetName() const { return "Timing"; }
@@ -35,13 +42,13 @@ class Timing : public EngineSubsystem {
 
   // Hook into the game loop to retrieve specific timing info. 
   void PassStartSignal();
-  void PassUpdateTimingInfo(unsigned int delta_time_micros);
+  void PassUpdateTimingInfo(unsigned long long delta_time_micros);
   void PassDrawTimingInfo(float frame_interpolation);
 
-  unsigned int delta_time_micros_{ 0 };
-  unsigned int total_time_micros_{ 0 };
-  unsigned int update_count_{ 0 };
-  unsigned int draw_count_{ 0 };
+  unsigned long long delta_time_micros_{ 0 };
+  unsigned long long total_time_micros_{ 0 };
+  unsigned long long update_count_{ 0 };
+  unsigned long long draw_count_{ 0 };
   float frame_interpolation_{ 0.0f };
 
   TimePointMicros update_rate_sample_time_;
