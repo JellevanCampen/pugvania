@@ -30,7 +30,7 @@ enum class WindowsTerminalColor {
   Last = WHITE
 };
 
-// Utility class to convert from and to Windows terminal colors.
+// Utility functions to convert from and to Windows terminal colors.
 namespace WindowsTerminalColorUtility {
 
   static cRGBi GetColor(WindowsTerminalColor color_name) {
