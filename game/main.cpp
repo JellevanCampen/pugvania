@@ -20,6 +20,7 @@ int main()
   Point2Df p2(2.0f, 5.0f);
   Vector2Df v1(10.0f, 20.0f);
   Vector2Df vx(1.0f, 0.0f);
+  Line2Df l1(p1, p2);
 
   std::cout << p1 << ", " << p2 << ", " << v1 << std::endl;
   std::cout << p2 - p1 << std::endl;
@@ -29,6 +30,11 @@ int main()
   std::cout << v1.Normalize() << std::endl;
   std::cout << v1.Project(vx) << std::endl;
   std::cout << v1.Reflect(vx) << std::endl;
+  std::cout << l1 << std::endl;
+  std::cout << l1 + v1 << std::endl;
+  std::cout << l1.Direction() << std::endl;
+  std::cout << l1.Normal() << std::endl;
+  std::cout << l1.Direction().Rotate(3.141592f / 2) << std::endl;
 
   Engine::Create();
   g_log("Starting the game.", log::kGame);
