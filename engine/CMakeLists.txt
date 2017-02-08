@@ -37,6 +37,7 @@ set (SRC_ENGINE_COMMON_UTILITY
 	"common/utility/config_file.h"
 	"common/utility/float_comparison.h"
 	"common/utility/path.cpp"
+	"common/utility/pi.h"
 	"common/utility/windows_terminal_colors.h"
 	)
 source_group (engine\\common\\utility FILES ${SRC_ENGINE_COMMON_UTILITY})

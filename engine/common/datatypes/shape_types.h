@@ -5,6 +5,7 @@
 #include <string>
 #include <cmath>
 #include "common\utility\float_comparison.h"
+#include "common\utility\pi.h"
 
 namespace engine {
 
@@ -202,14 +203,19 @@ public:
 
   inline void Move(const Vector2D<valuetype>& vector) { p_ += vector; }
   inline void Resize(valuetype scalar) { r_ *= scalar; }
-  // TODO(Jelle): implement the area function, as it needs the Pi constant defined.
-  // inline valuetype Area() const { /* TODO */ }
+  inline valuetype Area() const { return valuetype(double(r_) * double(r_) * PI) ; }
   inline Line2D<valuetype> LineOn(float angle) const { return Line2D<valuetype>(p_.x_, p_.y_, valuetype(float(p_.x_) + std::cosf(angle_radians)), valuetype(float(p_.y_) + std::sinf(angle_radians))); }
   inline Point2D<valuetype> PointOn(float angle, float radius) const { return LineOn(angle)[radius]; }
   inline bool Contains(Point2D<valuetype> point) const { p_.Distance(point) <= r_; }
   inline bool Contains(Line2D<valuetype> line) const { return Contains(line.p1_) && Contains(line.p2_); }
-  // TODO(Jelle): implement this function by checking all four corner points. 
-  // inline bool Contains(Rectangle2D<valuetype> rectangle) const { /* TODO */ }
+  inline bool Contains(Rectangle2D<valuetype> rectangle) const { 
+    // Test whether the circle contains the most distant corner of the rectangle
+    valuetype dx1 = (p_.x_ - rectangle.p1_.x_) * (p_.x_ - rectangle.p1_.x_);
+    valuetype dx2 = (p_.x_ - rectangle.p2_.x_) * (p_.x_ - rectangle.p2_.x_);
+    valuetype dy1 = (p_.y_ - rectangle.p1_.y_) * (p_.y_ - rectangle.p1_.y_);
+    valuetype dy2 = (p_.y_ - rectangle.p2_.y_) * (p_.y_ - rectangle.p2_.y_);
+    return (r_ * r_) >= (dx1 >= dx2) ? (dx1) : (dx2)+(dy1 >= dy2) ? (dy1) : (dy2);
+  }
 
   Point2D<valuetype> p_;
   valuetype r_;
