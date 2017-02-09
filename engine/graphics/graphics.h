@@ -21,10 +21,13 @@ class Graphics : public EngineSubsystem{
 
  protected:
   virtual std::string GetName() const override = 0;
-  virtual void Initialize() override = 0;
+  virtual EngineSubsystem* Initialize() override = 0;
   virtual void Terminate() override = 0;
   virtual void Update() override = 0;
   virtual void Draw() override = 0;
+
+  // The graphics bootstrapper is allowed to initialize graphics subsystems.
+  friend class GraphicsBootstrapper;
 };
 
 } // namespace

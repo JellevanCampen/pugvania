@@ -52,10 +52,14 @@ void Engine::CreateSubsystems() {
   subsystems_.push_back(logging);
   timing = new Timing();
   subsystems_.push_back(timing);
+  graphics = new GraphicsBootstrapper();
+  subsystems_.push_back(graphics);
 }
 
 void Engine::DestroySubsystems() {
   // Destruction in reverse order.
+  delete graphics;
+  graphics = NULL;
   delete timing;
   timing = NULL;
   delete logging;
@@ -91,9 +95,13 @@ void Engine::Initialize() {
 #endif
 
   // Initialize all subsystems in forward order. 
-  for (EngineSubsystem* subsystem : subsystems_) {
-    subsystem->Initialize();
-    LogInitializationMessage(subsystem);
+  
+
+
+  for (EngineSubsystem*& subsystem : subsystems_) {
+    EngineSubsystem* address = subsystem->Initialize();
+    subsystem = address;
+    LogInitializationMessage(address);
   }
 
   // Load the engine configuration from engine_config.ini
@@ -111,7 +119,7 @@ void Engine::Terminate() {
   g_log("Engine terminating.", log::kEngine);
 
   // Terminate all subsystems in reverse order.
-  for (EngineSubsystem* subsystem : reverse(subsystems_)) {
+  for (EngineSubsystem*& subsystem : reverse(subsystems_)) {
     subsystem->Terminate();
     LogTerminationMessage(subsystem);
   }

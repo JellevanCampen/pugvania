@@ -13,7 +13,7 @@ class EngineSubsystem {
    virtual ~EngineSubsystem() { }
 
    virtual std::string GetName() const = 0;
-   virtual void Initialize() = 0;
+   virtual EngineSubsystem* Initialize() = 0; // Returns the address of its initialized version (this can differ from its original address if bootstrapping was used).
    virtual void Terminate() = 0;
    virtual void Update() = 0;
    virtual void Draw() = 0;

@@ -8,7 +8,7 @@
 
 namespace engine {
 
-void Path::Initialize() {
+EngineSubsystem* Path::Initialize() {
   boost::property_tree::ptree pt;
   try {
     boost::property_tree::ini_parser::read_ini(root_ + "path_config.ini", pt);
@@ -48,6 +48,7 @@ void Path::Initialize() {
     }
     exit(1);
   }
+  return this;
 }
 
 void Path::Terminate() {

@@ -34,7 +34,7 @@ class Logging : public EngineSubsystem{
 
  private:
    virtual std::string GetName() const { return "Logging"; }
-   virtual void Initialize() override;
+   virtual EngineSubsystem* Initialize() override;
    virtual void Terminate() override;
    virtual void Update() override { }
    virtual void Draw() override { }

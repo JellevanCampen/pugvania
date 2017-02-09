@@ -28,8 +28,9 @@ std::string Timing::GetTimestamp(bool include_date)
   return timestamp.str();
 }
 
-void Timing::Initialize() {
+EngineSubsystem* Timing::Initialize() {
   LoadConfiguration();
+  return this;
 }
 
 void Timing::Terminate() {

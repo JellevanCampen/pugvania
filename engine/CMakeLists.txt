@@ -61,6 +61,8 @@ source_group (engine\\debugging FILES ${SRC_ENGINE_DEBUGGING})
 # [ engine/graphics ]
 set (SRC_ENGINE_GRAPHICS
 	"graphics/graphics.h"
+	"graphics/graphics_bootstrapper.h"
+	"graphics/graphics_bootstrapper.cpp"
 	"graphics/graphics_glfw.h"
 	"graphics/graphics_glfw.cpp"
 	)

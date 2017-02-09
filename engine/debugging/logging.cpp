@@ -4,9 +4,10 @@
 
 namespace engine {
 
-void Logging::Initialize() {
+EngineSubsystem* Logging::Initialize() {
   InitializeLogOutputs();
   InitializeLogChannels();
+  return this;
 }
 
 void Logging::Terminate() {

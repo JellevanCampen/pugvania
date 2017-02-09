@@ -10,7 +10,7 @@
 #include "debugging/logging.h"
 #include "timing/timing.h"
 #include "graphics/graphics.h"
-#include "graphics/graphics_glfw.h"
+#include "graphics/graphics_bootstrapper.h"
 
 namespace engine {
 
