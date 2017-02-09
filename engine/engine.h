@@ -9,6 +9,8 @@
 #include "common/utility/path.h"
 #include "debugging/logging.h"
 #include "timing/timing.h"
+#include "graphics/graphics.h"
+#include "graphics/graphics_glfw.h"
 
 namespace engine {
 
@@ -36,6 +38,7 @@ class Engine {
   Path* path{ NULL };
   Logging* logging{ NULL };
   Timing* timing{ NULL };
+  Graphics* graphics{ NULL };
 
  private:
   typedef std::chrono::duration<unsigned long long, std::micro> DurationMicros;

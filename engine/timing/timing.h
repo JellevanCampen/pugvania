@@ -29,7 +29,7 @@ class Timing : public EngineSubsystem {
   typedef std::chrono::duration<unsigned long long, std::micro> DurationMicros;
   typedef std::chrono::time_point<std::chrono::high_resolution_clock, DurationMicros> TimePointMicros;
 
-  virtual std::string GetName() const { return "Timing"; }
+  virtual std::string GetName() const override { return "Timing"; }
   virtual void Initialize() override;
   virtual void Terminate() override;
   virtual void Update() override;

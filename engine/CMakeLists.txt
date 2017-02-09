@@ -61,6 +61,8 @@ source_group (engine\\debugging FILES ${SRC_ENGINE_DEBUGGING})
 # [ engine/graphics ]
 set (SRC_ENGINE_GRAPHICS
 	"graphics/graphics.h"
+	"graphics/graphics_glfw.h"
+	"graphics/graphics_glfw.cpp"
 	)
 source_group (engine\\graphics FILES ${SRC_ENGINE_GRAPHICS})
 
@@ -112,3 +114,10 @@ if (Date_FOUND)
 	message(STATUS ">> Found: Howard Hinnant's Date library")
     target_include_directories(engine PUBLIC ${Date_INCLUDE_DIRS})
 endif (Date_FOUND)
+
+# [GLFW]
+find_package(GLFW REQUIRED)
+if (GLFW_FOUND)
+	message(STATUS ">> Found: GLFW library")
+    target_include_directories(engine PUBLIC ${GLFW_INCLUDE_DIRS})
+endif (GLFW_FOUND)

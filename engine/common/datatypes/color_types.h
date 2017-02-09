@@ -199,7 +199,7 @@ public:
   inline colorRGBAfloat operator/ (valuetype scalar) const { return colorRGBAfloat(std::min(r_ / scalar, valuetype(1.0)), std::min(g_ / scalar, valuetype(1.0)), std::min(b_ / scalar, valuetype(1.0)), std::min(a_ / scalar, valuetype(1.0))); }
   friend std::ostream& operator<<(std::ostream &os, const colorRGBAfloat& c) { return os << "(" << c.r_ << ", " << c.g_ << ", " << c.b_ << ", " << c.a_ << ")"; }
 
-  float distance(const colorRGBAinteger& other) const {
+  float distance(const colorRGBAfloat& other) const {
     float dr = float(r_) - float(other.r_);
     float dg = float(g_) - float(other.g_);
     float db = float(b_) - float(other.b_);

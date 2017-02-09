@@ -9,10 +9,10 @@
 namespace engine {
 
 // Interface for graphics subsystems. 
-class Graphics : EngineSubsystem{
+class Graphics : public EngineSubsystem{
  public:
   // Camera operations
-   virtual void CameraMove(Point2Df position) = 0;
+  virtual void CameraMove(Point2Df position) = 0;
   // Primitive drawing
   virtual void Draw2DPoint(Point2Df point, float z = 0.0f, cRGBAf color = cRGBAf()) const = 0;
   virtual void Draw2DLine(Line2Df line, float z = 0.0f, cRGBAf color = cRGBAf()) const = 0;
@@ -20,13 +20,11 @@ class Graphics : EngineSubsystem{
   virtual void Draw2DCircle(Circle2Df circle, float z = 0.0f, bool filled = false, cRGBAf color = cRGBAf()) const = 0;
 
  protected:
-  virtual ~Graphics() { }
-
-  virtual std::string GetName() const = 0;
-  virtual void Initialize() = 0;
-  virtual void Terminate() = 0;
-  virtual void Update() = 0;
-  virtual void Draw() = 0;
+  virtual std::string GetName() const override = 0;
+  virtual void Initialize() override = 0;
+  virtual void Terminate() override = 0;
+  virtual void Update() override = 0;
+  virtual void Draw() override = 0;
 };
 
 } // namespace
