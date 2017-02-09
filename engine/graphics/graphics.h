@@ -4,23 +4,20 @@
 
 #include "engine_subsystem.h"
 #include "common\datatypes\color_types.h"
+#include "common\datatypes\shape_types.h"
 
 namespace engine {
-
-// TODO(Jelle): remove these once they have been implemented. 
-struct Line2Df;
-struct Rectangle2Df;
-struct Circle2Df;
 
 // Interface for graphics subsystems. 
 class Graphics : EngineSubsystem{
  public:
+  // Camera operations
+   virtual void CameraMove(Point2Df position) = 0;
+  // Primitive drawing
+  virtual void Draw2DPoint(Point2Df point, float z = 0.0f, cRGBAf color = cRGBAf()) const = 0;
   virtual void Draw2DLine(Line2Df line, float z = 0.0f, cRGBAf color = cRGBAf()) const = 0;
-  virtual void Draw2DLine(float x1, float y1, float x2, float y2, float z = 0.0f, cRGBAf color = cRGBAf()) const = 0;
   virtual void Draw2DRectangle(Rectangle2Df rectangle, float z = 0.0f, bool filled = false, cRGBAf color = cRGBAf()) const = 0;
-  virtual void Draw2DRectangle(float x1, float y1, float x2, float y2, float z = 0.0f, bool filled = false, cRGBAf color = cRGBAf()) const = 0;
   virtual void Draw2DCircle(Circle2Df circle, float z = 0.0f, bool filled = false, cRGBAf color = cRGBAf()) const = 0;
-  virtual void Draw2DCircle(float x, float y, float r, float z = 0.0f, bool filled = false, cRGBAf color = cRGBAf()) const = 0;
 
  protected:
   virtual ~Graphics() { }
