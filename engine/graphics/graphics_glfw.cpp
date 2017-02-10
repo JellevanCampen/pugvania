@@ -1,5 +1,6 @@
 #include "graphics_glfw.h"
 #include "engine.h"
+#include <GLFW\glfw3.h>
 #include "common\utility\debug_defines.h"
 
 namespace engine {
@@ -36,15 +37,17 @@ void GraphicsGLFW::Draw2DCircle(Circle2Df circle, float z, bool filled, cRGBAf c
 
 EngineSubsystem* GraphicsGLFW::Initialize()
 {
-  // TODO: implement function
-  DEBUG_UNIMPLEMENTED
+  if (!glfwInit()) 
+  {
+    g_log("Failed to initialize GLFW.", log::kError);
+  }
+
   return this;
 }
 
 void GraphicsGLFW::Terminate()
 {
-  // TODO: implement function
-  DEBUG_UNIMPLEMENTED
+  glfwTerminate();
 }
 
 void GraphicsGLFW::Update()

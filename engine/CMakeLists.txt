@@ -118,9 +118,16 @@ if (Date_FOUND)
     target_include_directories(engine PUBLIC ${Date_INCLUDE_DIRS})
 endif (Date_FOUND)
 
-# [GLFW]
-find_package(GLFW REQUIRED)
-if (GLFW_FOUND)
+# [GLFW] (compiled along with the engine)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE) # Don't build docs
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE) # Don't build tests
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # Don't build examples
+message(STATUS "$ENV{GLFW_ROOT}")
+message(STATUS ${CMAKE_CURRENT_BINARY_DIR})
+if (NOT "$ENV{GLFW_ROOT}" STREQUAL "")
+	add_subdirectory($ENV{GLFW_ROOT} libs/glfw)
+	target_link_libraries(engine PUBLIC glfw)
 	message(STATUS ">> Found: GLFW library")
-    target_include_directories(engine PUBLIC ${GLFW_INCLUDE_DIRS})
-endif (GLFW_FOUND)
+else()
+	message(FATAL_ERROR ">> Not found: GLFW library. Set environment variable GLFW_ROOT to the GLFW root directory to locate it.")
+endif()
