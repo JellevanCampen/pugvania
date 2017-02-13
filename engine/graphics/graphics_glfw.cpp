@@ -1,6 +1,5 @@
 #include "graphics_glfw.h"
 #include "engine.h"
-#include <GLFW\glfw3.h>
 #include "common\utility\debug_defines.h"
 
 namespace engine {
@@ -35,31 +34,44 @@ void GraphicsGLFW::Draw2DCircle(Circle2Df circle, float z, bool filled, cRGBAf c
   DEBUG_UNIMPLEMENTED
 }
 
+void GraphicsGLFW::GLFWErrorCallback(int error, const char * description)
+{
+  g_log("GLFW Error: " + std::string(description), log::kError);
+}
+
 EngineSubsystem* GraphicsGLFW::Initialize()
 {
-  if (!glfwInit()) 
-  {
-    g_log("Failed to initialize GLFW.", log::kError);
-  }
+  if (!glfwInit()) { g_log("Failed to initialize GLFW.", log::kError); }
+  glfwSetErrorCallback(GLFWErrorCallback);
+
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  window = glfwCreateWindow(800, 450, "Pugvania Engine", NULL, NULL);
+  if (!window) { g_log("Failed to create a window.", log::kError); }
+
+  glfwMakeContextCurrent(window);
+
+  glfwSwapInterval(1);
 
   return this;
 }
 
 void GraphicsGLFW::Terminate()
 {
+  glfwDestroyWindow(window);
   glfwTerminate();
 }
 
 void GraphicsGLFW::Update()
 {
-  // TODO: implement function
-  // DEBUG_UNIMPLEMENTED
+  // Stop the engine if the window is closed
+  if (glfwWindowShouldClose(window)) { g_engine->Stop(); }
 }
 
 void GraphicsGLFW::Draw()
 {
-  // TODO: implement function
-  // DEBUG_UNIMPLEMENTED
+  glfwSwapBuffers(window);
+  glfwPollEvents();
 }
 
 }; // namespace

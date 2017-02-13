@@ -3,6 +3,7 @@
 #define ENGINE_GRAPHICS_GRAPHICS_GLFW_H_
 
 #include "graphics.h"
+#include <GLFW\glfw3.h>
 
 namespace engine {
 
@@ -16,6 +17,7 @@ public:
   virtual void Draw2DLine(Line2Df line, float z = 0.0f, cRGBAf color = cRGBAf()) const override;
   virtual void Draw2DRectangle(Rectangle2Df rectangle, float z = 0.0f, bool filled = false, cRGBAf color = cRGBAf()) const override;
   virtual void Draw2DCircle(Circle2Df circle, float z = 0.0f, bool filled = false, cRGBAf color = cRGBAf()) const override;
+  static void GLFWErrorCallback(int error, const char* description);
 
 private:
   std::string GetName() const override { return "Graphics(GLFW)"; }
@@ -23,6 +25,8 @@ private:
   virtual void Terminate() override;
   virtual void Update() override;
   virtual void Draw() override;
+
+  GLFWwindow* window;
 };
 
 } // namespace

@@ -215,10 +215,6 @@ void Engine::Update(unsigned long long delta_time_micros) {
   for (EngineSubsystem* subsystem : subsystems_)
     subsystem->Update();
 
-  // TODO(Jelle): Remove this later. This is temporary code to shut down the 
-  // engine after 5 seconds for debugging purposes.
-  if (timing->GetTotalTimeMicros() >= 5000000)
-    Stop();
   // TODO(Jelle): Remove this when the Timing is fully functional. This is 
   // temporary display rate measurement info. 
   if (timing->GetUpdateCount() % 60 == 0) {
