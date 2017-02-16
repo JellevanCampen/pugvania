@@ -3,6 +3,7 @@
 #define ENGINE_GRAPHICS_GRAPHICS_GLFW_H_
 
 #include "graphics.h"
+#include <glad\glad.h>
 #include <GLFW\glfw3.h>
 
 namespace engine {

@@ -24,7 +24,7 @@ int main()
   Line2Df l1(p1, p2);
   Rectangle2Df r1{ l1 };
 
-  std::cout << "p1=" << p1 << ", p2=" << p2 << ", p3=" << p3 << ", v1=" << v1 << ", vx=" << vx << std::endl;
+  /*std::cout << "p1=" << p1 << ", p2=" << p2 << ", p3=" << p3 << ", v1=" << v1 << ", vx=" << vx << std::endl;
   std::cout << "Subtraction of points: " << p2 - p1 << std::endl;
   std::cout << "Subtraction of points and vectors: " << p2 - (p2 - p1) << ", Correct? " << (p1 == (p2 - (p2 - p1))) << std::endl;
   std::cout << "Vector length: " << v1.Length() << std::endl;
@@ -40,7 +40,7 @@ int main()
   std::cout << "via Normal(): " << l1.Normal() << ", via Direction() and Rotate(): " << l1.Direction().Rotate(3.141592f / 2) << std::endl;
   std::cout << "Are equal? " << (l1.Normal() == l1.Direction().Rotate(3.1415926535897932384626433f / 2.0f)) << std::endl;
   std::cout << "r1=" << r1 << ", reordered: " << r1.ReorderPoints() << std::endl;
-  std::cout << "Line on: " << r1[0.25f] << ", Point on: " << r1[0.25f][0.25f] << ", Correct? " << (r1[1.0f][0.0f].Interpolate(r1[0.0f][1.0f], 0.25f) == p3) << std::endl;
+  std::cout << "Line on: " << r1[0.25f] << ", Point on: " << r1[0.25f][0.25f] << ", Correct? " << (r1[1.0f][0.0f].Interpolate(r1[0.0f][1.0f], 0.25f) == p3) << std::endl;*/
 
   Engine::Create();
   g_log("Starting the game.", log::kGame);

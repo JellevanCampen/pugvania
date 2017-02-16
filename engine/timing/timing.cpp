@@ -2,7 +2,7 @@
 #include "engine.h"
 #include <sstream>
 #include <iomanip>
-#include "date.h"
+#include <date/date.h>
 
 namespace engine {
 
@@ -48,7 +48,7 @@ void Timing::Draw() {
 }
 
 void Timing::LoadConfiguration() {
-  ConfigFile engine_config((*g_engine->path)["config"] + "engine_config.ini", ConfigFile::WARN_COUT, ConfigFile::WARN_COUT);
+  ConfigFile engine_config((*g_engine->path)["config"] + "engine_config.ini", ConfigFile::kWARN_COUT, ConfigFile::kWARN_COUT);
   engine_config.ReadProperty<unsigned short int>("timing.update_rate_sample", &update_rate_sample_, 10);
   engine_config.ReadProperty<unsigned short int>("timing.draw_rate_sample", &draw_rate_sample_, 10);
   engine_config.ReadProperty<unsigned short int>("timing.rate_rolling_average_window", &rate_rolling_average_window_, 4);

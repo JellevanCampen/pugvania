@@ -34,7 +34,7 @@ void Logging::InitializeLogOutputs() {
 }
 
 void Logging::InitializeLogChannels() {
-  ConfigFile logging_config((*g_engine->path)["config"] + "logging_config.ini", ConfigFile::WARN_COUT, ConfigFile::WARN_COUT);
+  ConfigFile logging_config((*g_engine->path)["config"] + "logging_config.ini", ConfigFile::kWARN_COUT, ConfigFile::kWARN_COUT);
   InitializeLogChannel("default", logging_config);
   InitializeLogChannel("warning", logging_config);
   InitializeLogChannel("error", logging_config);

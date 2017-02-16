@@ -32,7 +32,7 @@ void GraphicsBootstrapper::Draw2DCircle(Circle2Df circle, float z, bool filled, 
 EngineSubsystem* GraphicsBootstrapper::Initialize()
 {
   std::string graphics_subsystem;
-  ConfigFile engine_config((*g_engine->path)["config"] + "engine_config.ini", ConfigFile::WARN_COUT, ConfigFile::WARN_COUT);
+  ConfigFile engine_config((*g_engine->path)["config"] + "engine_config.ini", ConfigFile::kWARN_COUT, ConfigFile::kWARN_COUT);
   engine_config.ReadProperty<std::string>("subsystems.graphics", &graphics_subsystem, "glfw");
 
   // Bootstrap a graphics subsystem implementation based on the config settings

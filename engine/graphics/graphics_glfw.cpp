@@ -51,6 +51,14 @@ EngineSubsystem* GraphicsGLFW::Initialize()
 
   glfwMakeContextCurrent(window);
 
+  gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
+  int maj, min, rev;
+  glfwGetVersion(&maj, &min, &rev);
+  std::stringstream ss;
+  ss << "Using OpenGL version: " << maj << "." << min << "." << rev;
+  g_log(ss.str(), log::kEngine);
+
   glfwSwapInterval(1);
 
   return this;

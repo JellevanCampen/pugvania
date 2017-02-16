@@ -39,9 +39,9 @@ bool ConfigFile::ReadIniFile() {
 void ConfigFile::DoFileErrorHandling(std::string message, unsigned long int line) const {
   std::stringstream log_message;
   switch (file_error_handling_) {
-  case IGNORE:
+  case kIGNORE:
     return;
-  case WARN:
+  case kWARN:
     log_message << "Error reading ini configuration file. Default config values will be used. File ("
       << filename_
       << " at line "
@@ -50,7 +50,7 @@ void ConfigFile::DoFileErrorHandling(std::string message, unsigned long int line
       << message;
     g_log(log_message.str(), log::kWarning);
     return;
-  case WARN_COUT:
+  case kWARN_COUT:
     log_message << "Error reading ini configuration file. Default config values will be used. File ("
       << filename_
       << " at line "
@@ -59,7 +59,7 @@ void ConfigFile::DoFileErrorHandling(std::string message, unsigned long int line
       << message;
     std::cout << log_message.str() << std::endl;
     return;
-  case SHUT_DOWN:
+  case kSHUT_DOWN:
     log_message << "Error reading ini configuration file. This is a critical error, shutting down the engine. File ("
       << filename_
       << " at line "
@@ -77,9 +77,9 @@ void ConfigFile::DoFileErrorHandling(std::string message, unsigned long int line
 void ConfigFile::DoPropertyErrorHandling(std::string message, std::string property) const {
   std::stringstream log_message;
   switch (property_error_handling_) {
-  case IGNORE:
+  case kIGNORE:
     return;
-  case WARN:
+  case kWARN:
     log_message << "Error reading configuration file property <"
       << property
       << ">. Default config value will be used. File ("
@@ -88,7 +88,7 @@ void ConfigFile::DoPropertyErrorHandling(std::string message, std::string proper
       << message;
     g_log(log_message.str(), log::kWarning);
     return;
-  case WARN_COUT:
+  case kWARN_COUT:
     log_message << "Error reading configuration file property <"
       << property
       << ">. Default config value will be used. File ("
@@ -97,7 +97,7 @@ void ConfigFile::DoPropertyErrorHandling(std::string message, std::string proper
       << message;
     std::cout << log_message.str() << std::endl;
     return;
-  case SHUT_DOWN:
+  case kSHUT_DOWN:
     log_message << "Error reading configuration file property. This is a critical error, shutting down the engine. File ("
       << filename_
       << "):  "

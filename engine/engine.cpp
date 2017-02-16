@@ -157,7 +157,7 @@ void Engine::LogTerminationMessage(EngineSubsystem* subsystem) {
 
 void Engine::LoadConfiguration()
 {
-  ConfigFile engine_config((*g_engine->path)["config"] + "engine_config.ini", ConfigFile::WARN_COUT, ConfigFile::WARN_COUT);
+  ConfigFile engine_config((*g_engine->path)["config"] + "engine_config.ini", ConfigFile::kWARN_COUT, ConfigFile::kWARN_COUT);
   engine_config.ReadProperty<bool>("engine.drawing_is_enabled", &drawing_is_enabled_, true);
   engine_config.ReadProperty<bool>("engine.update_time_step_is_fixed", &update_time_step_is_fixed_, true);
   engine_config.ReadProperty<unsigned int>("engine.time_step_micros", &time_step_micros_, 1000000 / 60);

@@ -16,13 +16,13 @@ class ConfigFile {
   // initialization errors that occur before the Logging subsystems has been 
   // initialized. 
   enum ErrorHandling {
-    IGNORE,
-    WARN,
-    WARN_COUT,
-    SHUT_DOWN
+    kIGNORE,
+    kWARN,
+    kWARN_COUT,
+    kSHUT_DOWN
   };
 
-  ConfigFile(std::string filename, ErrorHandling file_error_handling = WARN, ErrorHandling property_error_handling = WARN);
+  ConfigFile(std::string filename, ErrorHandling file_error_handling = kWARN, ErrorHandling property_error_handling = kWARN);
   template<typename T> bool ReadProperty(std::string property, T* out_value, T default = T()) const {
     if (file_read_successfully_ == false) {
       DoPropertyErrorHandling("The configuration file could not be opened correctly. Therefore property cannot be read.", property);

@@ -67,6 +67,8 @@ set (SRC_ENGINE_GRAPHICS
 	"graphics/graphics_glfw.h"
 	"graphics/graphics_glfw.cpp"
 	"graphics/shader_resources.h"
+	"graphics/shader_resources.cpp"
+	"graphics/glad.c"
 	)
 source_group (engine\\graphics FILES ${SRC_ENGINE_GRAPHICS})
 
@@ -114,6 +116,9 @@ target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 # Make all required external libraries available
 #
 
+# [Date, GLAD, KHR]
+target_include_directories(engine PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/../include")
+
 # [Boost]
 find_package(Boost 1.62.0 REQUIRED)
 if (Boost_FOUND)
@@ -121,13 +126,6 @@ if (Boost_FOUND)
 	target_include_directories(engine PUBLIC ${Boost_INCLUDE_DIRS})
 	target_link_libraries(engine PUBLIC ${Boost_LIBRARIES})
 endif (Boost_FOUND)
-
-# [Date]
-find_package(Date REQUIRED)
-if (Date_FOUND)
-	message(STATUS ">> Found: Howard Hinnant's Date library")
-    target_include_directories(engine PUBLIC ${Date_INCLUDE_DIRS})
-endif (Date_FOUND)
 
 # [GLFW] (compiled along with the engine)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE) # Don't build docs
