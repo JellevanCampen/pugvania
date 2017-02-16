@@ -66,8 +66,18 @@ set (SRC_ENGINE_GRAPHICS
 	"graphics/graphics_bootstrapper.cpp"
 	"graphics/graphics_glfw.h"
 	"graphics/graphics_glfw.cpp"
+	"graphics/shader_resources.h"
 	)
 source_group (engine\\graphics FILES ${SRC_ENGINE_GRAPHICS})
+
+# [ engine/resources ]
+set (SRC_ENGINE_RESOURCES
+	"resources/resource.h"
+	"resources/resources.h"
+	"resources/resources.cpp"
+	"resources/resource_cache.h"
+	)
+source_group (engine\\resources FILES ${SRC_ENGINE_RESOURCES})
 
 # [ engine/timing ]
 set (SRC_ENGINE_TIMING
@@ -85,6 +95,7 @@ set (SRC_ALL
 	${SRC_ENGINE_COMMON_UTILITY}
 	${SRC_ENGINE_DEBUGGING}
 	${SRC_ENGINE_GRAPHICS}
+	${SRC_ENGINE_RESOURCES}
 	${SRC_ENGINE_TIMING}
 	)
 

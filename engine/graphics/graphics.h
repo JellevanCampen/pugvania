@@ -11,6 +11,8 @@ namespace engine {
 // Interface for graphics subsystems. 
 class Graphics : public EngineSubsystem{
  public:
+  // Shader operations
+  
   // Camera operations
   virtual void CameraMove(Point2Df position) = 0;
   // Primitive drawing
