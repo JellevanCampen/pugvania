@@ -11,6 +11,11 @@ namespace engine {
 // Graphics subsystem implementation using GLFW. Renders graphics onscreen.
 class GraphicsGLFW : public Graphics {
 public:
+  // Shader operations
+  virtual VertexShader* LoadVertexShader(std::string filename) override;
+  virtual void UnloadVertexShader(VertexShader* vertex_shader) override;
+  virtual FragmentShader* LoadFragmentShader(std::string filename) override;
+  virtual void UnloadFragmentShader(FragmentShader* fragment_shader) override;
   // Camera operations
   virtual void CameraMove(Point2Df position) override;
   // Primitive drawing

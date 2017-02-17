@@ -2,6 +2,8 @@
 #ifndef ENGINE_ENGINE_H_
 #define ENGINE_ENGINE_H_
 
+#define NOMINMAX
+
 #include <chrono>
 #include <list>
 #include <iostream>

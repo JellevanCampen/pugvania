@@ -193,7 +193,8 @@ void Engine::RunGameLoop() {
       }
 
       if (drawing_is_enabled_ && (!draw_rate_is_capped_ || !update_drawn)) {
-        Draw(std::min(1.0f, ((float)lag.count()) / ((float)time_step_micros_)));
+        float interpolation = (float)lag.count() / ((float)time_step_micros_);
+        Draw((1.0f < interpolation) ? 1.0f : interpolation);
         update_drawn = true;
       }
     } else {

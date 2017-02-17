@@ -4,30 +4,15 @@
 
 namespace engine {
 
-void GraphicsBootstrapper::CameraMove(Point2Df position)
-{ 
-  g_log("Calling bootstrapper function (graphics subsystem call before the graphics subsystem was bootstrapped): " __FUNCTION__, log::kError);
-}
-
-void GraphicsBootstrapper::Draw2DPoint(Point2Df point, float z, cRGBAf color) const
-{
-  g_log("Calling bootstrapper function (graphics subsystem call before the graphics subsystem was bootstrapped): " __FUNCTION__, log::kError);
-}
-
-void GraphicsBootstrapper::Draw2DLine(Line2Df line, float z, cRGBAf color) const
-{
-  g_log("Calling bootstrapper function (graphics subsystem call before the graphics subsystem was bootstrapped): " __FUNCTION__, log::kError);
-}
-
-void GraphicsBootstrapper::Draw2DRectangle(Rectangle2Df rectangle, float z, bool filled, cRGBAf color) const
-{
-  g_log("Calling bootstrapper function (graphics subsystem call before the graphics subsystem was bootstrapped): " __FUNCTION__, log::kError);
-}
-
-void GraphicsBootstrapper::Draw2DCircle(Circle2Df circle, float z, bool filled, cRGBAf color) const
-{
-  g_log("Calling bootstrapper function (graphics subsystem call before the graphics subsystem was bootstrapped): " __FUNCTION__, log::kError);
-}
+VertexShader* GraphicsBootstrapper::LoadVertexShader(std::string filename) { DEBUG_BOOTSTRAPPER_FUNCTION return NULL; }
+void GraphicsBootstrapper::UnloadVertexShader(VertexShader* vertex_shader) { DEBUG_BOOTSTRAPPER_FUNCTION }
+FragmentShader* GraphicsBootstrapper::LoadFragmentShader(std::string filename) { DEBUG_BOOTSTRAPPER_FUNCTION return NULL; }
+void GraphicsBootstrapper::UnloadFragmentShader(FragmentShader* fragment_shader) { DEBUG_BOOTSTRAPPER_FUNCTION }
+void GraphicsBootstrapper::CameraMove(Point2Df position) { DEBUG_BOOTSTRAPPER_FUNCTION }
+void GraphicsBootstrapper::Draw2DPoint(Point2Df point, float z, cRGBAf color) const { DEBUG_BOOTSTRAPPER_FUNCTION }
+void GraphicsBootstrapper::Draw2DLine(Line2Df line, float z, cRGBAf color) const { DEBUG_BOOTSTRAPPER_FUNCTION }
+void GraphicsBootstrapper::Draw2DRectangle(Rectangle2Df rectangle, float z, bool filled, cRGBAf color) const { DEBUG_BOOTSTRAPPER_FUNCTION }
+void GraphicsBootstrapper::Draw2DCircle(Circle2Df circle, float z, bool filled, cRGBAf color) const { DEBUG_BOOTSTRAPPER_FUNCTION }
 
 EngineSubsystem* GraphicsBootstrapper::Initialize()
 {
@@ -47,19 +32,8 @@ EngineSubsystem* GraphicsBootstrapper::Initialize()
   return NULL;
 }
 
-void GraphicsBootstrapper::Terminate()
-{
-  g_log("Calling bootstrapper terminator (graphics subsystem bootcaller is terminated, meaning it failed to bootstrap the graphics subsystem during initialization): " __FUNCTION__, log::kError);
-}
-
-void GraphicsBootstrapper::Update()
-{
-  g_log("Calling bootstrapper function (graphics subsystem call before the graphics subsystem was bootstrapped): " __FUNCTION__, log::kError);
-}
-
-void GraphicsBootstrapper::Draw()
-{
-  g_log("Calling bootstrapper function (graphics subsystem call before the graphics subsystem was bootstrapped): " __FUNCTION__, log::kError);
-}
+void GraphicsBootstrapper::Terminate() { DEBUG_BOOTSTRAPPER_FUNCTION }
+void GraphicsBootstrapper::Update() { DEBUG_BOOTSTRAPPER_FUNCTION }
+void GraphicsBootstrapper::Draw() { DEBUG_BOOTSTRAPPER_FUNCTION }
 
 }; // namespace

@@ -1,8 +1,39 @@
 #include "graphics_glfw.h"
 #include "engine.h"
+#include "shader_resources.h"
 #include "common\utility\debug_defines.h"
 
 namespace engine {
+
+VertexShader* GraphicsGLFW::LoadVertexShader(std::string filename)
+{
+  // TODO: use a resource manager here to share shaders among objects
+  VertexShader* vertex_shader = new VertexShader(filename);
+  vertex_shader->Load();
+  return vertex_shader;
+}
+
+void GraphicsGLFW::UnloadVertexShader(VertexShader* vertex_shader)
+{
+  // TODO: use a resource manager here to share shaders among objects
+  vertex_shader->Unload();
+  delete vertex_shader;
+}
+
+FragmentShader* GraphicsGLFW::LoadFragmentShader(std::string filename)
+{
+  // TODO: use a resource manager here to share shaders among objects
+  FragmentShader* fragment_shader = new FragmentShader(filename);
+  fragment_shader->Load();
+  return fragment_shader;
+}
+
+void GraphicsGLFW::UnloadFragmentShader(FragmentShader* fragment_shader)
+{
+  // TODO: use a resource manager here to share shaders among objects
+  fragment_shader->Unload();
+  delete fragment_shader;
+}
 
 void GraphicsGLFW::CameraMove(Point2Df position)
 {
@@ -60,6 +91,11 @@ EngineSubsystem* GraphicsGLFW::Initialize()
   g_log(ss.str(), log::kEngine);
 
   glfwSwapInterval(1);
+
+  // TODO: remove this, this is testing code
+  VertexShader* shVert = LoadVertexShader("default");
+  FragmentShader* shFrag = LoadFragmentShader("default");
+  // remove this, this is testing code
 
   return this;
 }

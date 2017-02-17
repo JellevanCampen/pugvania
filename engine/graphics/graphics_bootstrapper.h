@@ -3,12 +3,18 @@
 #define ENGINE_GRAPHICS_GRAPHICS_BOOTSTRAPPER_H_
 
 #include "graphics.h"
+#include "common\utility\debug_defines.h"
 
 namespace engine {
 
 // Graphics subsystem bootstrapper. Loads the correct graphics subsystem based on the config settings. 
 class GraphicsBootstrapper : public Graphics {
  public:
+  // Shader operations
+  virtual VertexShader* LoadVertexShader(std::string filename) override;
+  virtual void UnloadVertexShader(VertexShader* vertex_shader) override;
+  virtual FragmentShader* LoadFragmentShader(std::string filename) override;
+  virtual void UnloadFragmentShader(FragmentShader* fragment_shader) override;
   // Camera operations
   virtual void CameraMove(Point2Df position) override;
   // Primitive drawing

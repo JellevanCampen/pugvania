@@ -5,6 +5,8 @@
 #include "engine_subsystem.h"
 #include "common\datatypes\color_types.h"
 #include "common\datatypes\shape_types.h"
+#include "shader_resources.h"
+#include <string>
 
 namespace engine {
 
@@ -12,7 +14,10 @@ namespace engine {
 class Graphics : public EngineSubsystem{
  public:
   // Shader operations
-  
+  virtual VertexShader* LoadVertexShader(std::string filename) = 0;
+  virtual void UnloadVertexShader(VertexShader* vertex_shader) = 0;
+  virtual FragmentShader* LoadFragmentShader(std::string filename) = 0;
+  virtual void UnloadFragmentShader(FragmentShader* fragment_shader) = 0;
   // Camera operations
   virtual void CameraMove(Point2Df position) = 0;
   // Primitive drawing
